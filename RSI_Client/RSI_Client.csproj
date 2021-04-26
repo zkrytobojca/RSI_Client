@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,6 +56,104 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdminWindow.xaml.cs">
+      <DependentUpon>AdminWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationConstants.cs" />
+    <Compile Include="AuthorListPopup.xaml.cs">
+      <DependentUpon>AuthorListPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BookListPopup.xaml.cs">
+      <DependentUpon>BookListPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Icons\XAML\book-open.xaml.cs">
+      <DependentUpon>book-open.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Icons\XAML\book.xaml.cs">
+      <DependentUpon>book.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Icons\XAML\bookmark.xaml.cs">
+      <DependentUpon>bookmark.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Icons\XAML\clock.xaml.cs">
+      <DependentUpon>clock.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Icons\XAML\cross.xaml.cs">
+      <DependentUpon>cross.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Icons\XAML\padlock.xaml.cs">
+      <DependentUpon>padlock.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Icons\XAML\plus.xaml.cs">
+      <DependentUpon>plus.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Icons\XAML\search.xaml.cs">
+      <DependentUpon>search.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Icons\XAML\users.xaml.cs">
+      <DependentUpon>users.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LoginPopup.xaml.cs">
+      <DependentUpon>LoginPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RegisterPopup.xaml.cs">
+      <DependentUpon>RegisterPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ValidationRules\EmptyFieldValidationRule.cs" />
+    <Compile Include="ViewModels\AdminWindowVM.cs" />
+    <Compile Include="ViewModels\MainWindowVM.cs" />
+    <Page Include="AdminWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="AuthorListPopup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BookListPopup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Icons\XAML\book-open.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Icons\XAML\book.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Icons\XAML\bookmark.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Icons\XAML\clock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Icons\XAML\cross.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Icons\XAML\padlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Icons\XAML\plus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Icons\XAML\search.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Icons\XAML\users.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="LoginPopup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -63,12 +162,24 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\EmptyFieldsMultiValidationConverter.cs" />
+    <Compile Include="Converters\NullReplaceConverter.cs" />
+    <Compile Include="Converters\NullToBoolConverter.cs" />
+    <Compile Include="Converters\NullToCollapsedConverter.cs" />
+    <Compile Include="Converters\NullToVisibleConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="RegisterPopup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Author.cs" />
+    <Compile Include="Model\Book.cs" />
+    <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -86,6 +197,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Icons\password.ttf" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -94,5 +207,17 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\PNG\book-open.png" />
+    <Resource Include="Icons\PNG\book.png" />
+    <Resource Include="Icons\PNG\bookmark.png" />
+    <Resource Include="Icons\PNG\clock.png" />
+    <Resource Include="Icons\PNG\lock.png" />
+    <Resource Include="Icons\PNG\plus.png" />
+    <Resource Include="Icons\PNG\search.png" />
+    <Resource Include="Icons\PNG\user.png" />
+    <Resource Include="Icons\PNG\x.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

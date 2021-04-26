@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="RSI_Client.Icons.XAML.book_open"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RSI_Client.Icons.XAML"
+             mc:Ignorable="d" 
+             d:DesignHeight="24" d:DesignWidth="24">
+    <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="svg98" Height="24" Width="24">
+        <Canvas.RenderTransform>
+            <TranslateTransform X="0" Y="0"/>
+        </Canvas.RenderTransform>
+        <Canvas.Resources/>
+        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path90" Fill="#FF172B4D" Data="M12 18.8459H2.1C1.47667 18.8459 1 18.3799 1 17.7706V3.07527C1 2.46595 1.47667 2 2.1 2H8.77333C11.1567 2 13.1 3.89964 13.1 6.22939V17.7706C13.1 18.3799 12.5867 18.8459 12 18.8459ZM3.2 16.6953H10.9V6.22939C10.9 5.08244 9.94667 4.15054 8.77333 4.15054H3.2V16.6953Z"/>
+        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path92" Fill="#FF172B4D" Data="M12 22C11.3767 22 10.9 21.534 10.9 20.9247C10.9 19.7778 9.94667 18.8459 8.77334 18.8459C8.15001 18.8459 7.67334 18.3799 7.67334 17.7706C7.67334 17.1613 8.15001 16.6953 8.77334 16.6953C11.1567 16.6953 13.1 18.595 13.1 20.9247C13.1 21.534 12.5867 22 12 22Z"/>
+        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path94" Fill="#FF172B4D" Data="M12 22C11.3767 22 10.9 21.534 10.9 20.9247C10.9 18.595 12.8434 16.6953 15.2267 16.6953C15.85 16.6953 16.3267 17.1613 16.3267 17.7706C16.3267 18.3799 15.85 18.8459 15.2267 18.8459C14.0534 18.8459 13.1 19.7778 13.1 20.9247C13.1 21.534 12.5867 22 12 22Z"/>
+        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path96" Fill="#FF172B4D" Data="M21.9 18.8459H12C11.3767 18.8459 10.9 18.3799 10.9 17.7706V6.22939C10.9 3.89964 12.8434 2 15.2267 2H21.9C22.5234 2 23 2.46595 23 3.07527V17.7706C23 18.3799 22.4867 18.8459 21.9 18.8459ZM13.1 16.6953H20.8V4.15054H15.2267C14.0534 4.15054 13.1 5.08244 13.1 6.22939V16.6953Z"/>
+    </Canvas>
+</UserControl>

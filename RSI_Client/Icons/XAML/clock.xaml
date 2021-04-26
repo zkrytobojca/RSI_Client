@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="RSI_Client.Icons.XAML.clock"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RSI_Client.Icons.XAML"
+             mc:Ignorable="d" 
+             d:DesignHeight="24" d:DesignWidth="24">
+    <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="svg122" Width="24" Height="24">
+        <Canvas.RenderTransform>
+            <TranslateTransform X="0" Y="0"/>
+        </Canvas.RenderTransform>
+        <Canvas.Resources/>
+        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path118" Fill="#FF172B4D" Data="M12 23C5.92977 23 1 18.0702 1 12C1 5.92977 5.92977 1 12 1C18.0702 1 23 5.92977 23 12C23 18.0702 18.0702 23 12 23ZM12 3.20736C7.14381 3.20736 3.20736 7.14381 3.20736 12C3.20736 16.8562 7.14381 20.7926 12 20.7926C16.8562 20.7926 20.7926 16.8562 20.7926 12C20.7926 7.14381 16.8562 3.20736 12 3.20736Z"/>
+        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path120" Fill="#FF172B4D" Data="M16.6722 16.3044C16.4515 16.3044 16.2307 16.2308 16.0468 16.1204L11.3746 12.9197C11.0802 12.699 10.8963 12.3679 10.8963 12V5.30436C10.8963 4.67894 11.3746 4.20068 12 4.20068C12.6254 4.20068 13.1037 4.67894 13.1037 5.30436V11.4114L17.2976 14.281C17.8127 14.6121 17.9231 15.3111 17.592 15.8261C17.3712 16.1572 17.0401 16.3044 16.6722 16.3044Z"/>
+    </Canvas>
+</UserControl>

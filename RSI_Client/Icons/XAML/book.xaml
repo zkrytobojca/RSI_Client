@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="RSI_Client.Icons.XAML.book"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RSI_Client.Icons.XAML"
+             mc:Ignorable="d" 
+             d:DesignHeight="24" d:DesignWidth="24">
+    <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="svg38" Height="24" Width="24">
+        <Canvas.RenderTransform>
+            <TranslateTransform X="0" Y="0"/>
+        </Canvas.RenderTransform>
+        <Canvas.Resources>
+            <RectangleGeometry xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Key="clip0" Rect="2, 1, 19, 22"/>
+        </Canvas.Resources>
+        <Canvas Name="g31" Clip="{StaticResource clip0}">
+            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path27" Fill="#FF172B4D" Data="M19.8867 23H5.1543C3.41016 23 2 21.6067 2 19.8833V4.11667C2 2.39333 3.41016 1 5.1543 1H19.8867C20.4805 1 21 1.47667 21 2.1V21.9C21 22.5233 20.5176 23 19.8867 23ZM5.1543 3.2C4.63477 3.2 4.22656 3.60333 4.22656 4.11667V19.8833C4.22656 20.3967 4.63477 20.8 5.1543 20.8H18.8105V3.2H5.1543Z"/>
+            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path29" Fill="#FF172B4D" Data="M3.11328 20.9833C2.51953 20.9833 2 20.5067 2 19.8833C2 18.16 3.41016 16.7667 5.1543 16.7667H19.9238C20.5176 16.7667 21.0371 17.2433 21.0371 17.8667C21.0371 18.49 20.5547 18.9667 19.9238 18.9667H5.1543C4.63477 18.9667 4.22656 19.4067 4.22656 19.8833C4.22656 20.5067 3.70703 20.9833 3.11328 20.9833Z"/>
+        </Canvas>
+    </Canvas>
+
+</UserControl>

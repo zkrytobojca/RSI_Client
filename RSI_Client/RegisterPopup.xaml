@@ -1,0 +1,106 @@
+﻿<Window x:Class="RSI_Client.RegisterPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RSI_Client"
+        xmlns:icons="clr-namespace:RSI_Client.Icons.XAML"
+        xmlns:validation="clr-namespace:RSI_Client.ValidationRules"
+        mc:Ignorable="d"
+        Title="Register" Name="RegisterWindow" ResizeMode="NoResize" Height="450" Width="500" FontSize="14">
+    <Window.Resources>
+        <ControlTemplate x:Key="ValidationErrorTemplate">
+            <DockPanel Margin="-15,0,15,0">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" >
+                    <Grid Width="12" Height="12">
+                        <Ellipse Width="12" Height="12" 
+            Fill="Red" HorizontalAlignment="Center" 
+            VerticalAlignment="Center"               
+                     ></Ellipse>
+                        <TextBlock Foreground="White" FontWeight="Heavy" 
+            FontSize="7" HorizontalAlignment="Center" 
+            VerticalAlignment="Center" TextAlignment="Center"
+                       ToolTip="{Binding ElementName=ErrorAdorner, 
+                       Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
+                       >X</TextBlock>
+                    </Grid>
+                    <TextBlock Foreground="Red" FontWeight="Bold" Margin="0,0,0,0" 
+
+                   Text="{Binding ElementName=ErrorAdorner, 
+                   Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
+                   ></TextBlock>
+                </StackPanel>
+                <AdornedElementPlaceholder 
+        x:Name="ErrorAdorner" ></AdornedElementPlaceholder>
+            </DockPanel>
+        </ControlTemplate>
+    </Window.Resources>
+    <Grid Background="AliceBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
+            <icons:users Height="25" Width="25"></icons:users>
+            <Label HorizontalContentAlignment="Center" Margin="0,5" VerticalAlignment="Center">Login</Label>
+        </StackPanel>
+        <TextBox DataContext="{Binding RelativeSource={RelativeSource FindAncestor, 
+       AncestorType={x:Type Window}}}" Margin="5,5,5,5" PreviewKeyDown="TextBoxDisableSpace" KeyDown="RegisterEnterPressed" PreviewTextInput="TextBoxLoginPreview" Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}"  Padding="5,5,5,5" Name="TextBoxRegisterLogin" Grid.Column="1" Grid.Row="2" >
+            <TextBox.Text>
+                <Binding NotifyOnValidationError="True" Path="ValidatedLogin"  UpdateSourceTrigger="LostFocus">
+                    <Binding.ValidationRules>
+                        <validation:EmptyFieldValidationRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+                
+            </TextBox.Text>
+        </TextBox>
+        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <icons:padlock Height="25" Width="25"></icons:padlock>
+
+            <Label HorizontalContentAlignment="Center" Margin="0,5" VerticalAlignment="Center">Password</Label>
+        </StackPanel>
+        <TextBox DataContext="{Binding RelativeSource={RelativeSource FindAncestor, 
+       AncestorType={x:Type Window}}}" Name="TextBoxRegisterPassword" KeyDown="RegisterEnterPressed" FontFamily="pack://application:,,,Icons/#password" PreviewKeyDown="TextBoxDisableSpace"  Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" PreviewTextInput="TextBoxPasswordPreview" Margin="5,5,5,5" Padding="5,5,5,5" Grid.Column="1" Grid.Row="4">
+            <TextBox.Text>
+                <Binding NotifyOnValidationError="True" Path="ValidatedPassword"  UpdateSourceTrigger="LostFocus">
+                    <Binding.ValidationRules>
+                        <validation:EmptyFieldValidationRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+
+            </TextBox.Text>
+            <TextBox.InputBindings>
+                <!--Disable CTRL+C -->
+                <KeyBinding Command="ApplicationCommands.NotACommand"
+            Key="C"
+            Modifiers="Control" />
+            </TextBox.InputBindings>
+        </TextBox>
+        <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <icons:padlock Height="25" Width="25"></icons:padlock>
+            <Label HorizontalContentAlignment="Center" Margin="0,5" VerticalAlignment="Center" FontSize="12">Repeat password</Label>
+        </StackPanel>
+        <PasswordBox Name="TextBoxRepeatPassword"  PreviewKeyDown="TextBoxDisableSpace" KeyDown="RegisterEnterPressed" PreviewTextInput="TextBoxPasswordPreview" Margin="5,5,5,5" Padding="5,5,5,5" Grid.Column="1" Grid.Row="6"></PasswordBox>
+        <Button Name="ButtonRegister" Margin="5,5,5,5" Padding="5,5,5,5" Content="Register" Grid.Row="7" Grid.Column="1"></Button>
+        <Label Margin="5,0" Grid.Row="8" Grid.Column="1" Grid.RowSpan="2" HorizontalContentAlignment="Center" >
+            <TextBlock FontSize="11" TextAlignment="Center" TextWrapping="Wrap" Foreground="Blue" PreviewMouseDown="LabelLoginClick">
+                <Run>Already have an account?</Run>
+                <Run>Login!</Run>
+            </TextBlock>
+        </Label>
+    </Grid>
+</Window>

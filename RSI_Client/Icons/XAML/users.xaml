@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="RSI_Client.Icons.XAML.users"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RSI_Client.Icons.XAML"
+             mc:Ignorable="d" 
+             d:DesignHeight="25" d:DesignWidth="25">
+    <Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="svg240">
+        <Canvas.RenderTransform>
+            <TranslateTransform X="0" Y="0"/>
+        </Canvas.RenderTransform>
+        <Canvas.Resources/>
+        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path232" Fill="#FF172B4D" Data="M2.1 23C1.47667 23 1 22.5234 1 21.9V18.7467C1 15.08 3.01667 13.0634 6.68333 13.0634H13.1C16.7667 13.0634 18.7833 15.08 18.7833 18.7467V21.9C18.7833 22.5234 18.3067 23 17.6833 23C17.06 23 16.5833 22.5234 16.5833 21.9V18.7467C16.5833 16.29 15.52 15.2634 13.1 15.2634H6.68333C4.22667 15.2634 3.2 16.3267 3.2 18.7467V21.9C3.2 22.4867 2.72333 23 2.1 23Z"/>
+        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path234" Fill="#FF172B4D" Data="M9.87338 12.1467C6.79338 12.1467 4.30005 9.65333 4.30005 6.57333C4.30005 3.49333 6.79338 1 9.87338 1C12.9534 1 15.4467 3.49333 15.4467 6.57333C15.4467 9.65333 12.9534 12.1467 9.87338 12.1467ZM9.87338 3.2C8.00338 3.2 6.50005 4.70333 6.50005 6.57333C6.50005 8.44333 8.00338 9.94667 9.87338 9.94667C11.7434 9.94667 13.2467 8.44333 13.2467 6.57333C13.2467 4.70333 11.7434 3.2 9.87338 3.2Z"/>
+        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path236" Fill="#FF172B4D" Data="M21.9 22.9999C21.2767 22.9999 20.8 22.5233 20.8 21.8999V18.7466C20.8 16.5833 19.9567 15.9233 19.2967 15.6299C18.7467 15.3733 18.5267 14.7133 18.7833 14.1633C19.04 13.6133 19.7 13.3933 20.25 13.6499C21.4967 14.2366 23 15.6299 23 18.7466V21.8999C23 22.4866 22.4867 22.9999 21.9 22.9999Z"/>
+        <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path238" Fill="#FF172B4D" Data="M15.7401 11.8168C15.3001 11.8168 14.8968 11.5601 14.7134 11.1201C14.4934 10.5701 14.7501 9.91009 15.3368 9.69009C16.6201 9.17676 17.4634 7.96676 17.4634 6.57342C17.4634 5.18009 16.6201 3.97009 15.3368 3.45676C14.7868 3.23676 14.4934 2.57676 14.7134 2.02676C14.9334 1.47676 15.5934 1.18342 16.1434 1.40342C18.2701 2.24676 19.6268 4.26342 19.6268 6.57342C19.6268 8.88342 18.2701 10.8634 16.1434 11.7434C15.9968 11.7801 15.8868 11.8168 15.7401 11.8168Z"/>
+    </Canvas>
+</UserControl>
