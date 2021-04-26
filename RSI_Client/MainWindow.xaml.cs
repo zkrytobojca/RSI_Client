@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
@@ -67,6 +68,15 @@ namespace RSI_Client
 
         private void LoginButtonClick(object sender, RoutedEventArgs e)
         {
+            // ---
+            CountriesService.CountriesPortClient client = new CountriesService.CountriesPortClient("CountriesPortSoap11");
+            CountriesService.getCountryRequest request = new CountriesService.getCountryRequest();
+            request.name = "Poland";
+            CountriesService.getCountryResponse country = client.getCountry(request);
+            ButtonUserLogin.Content = country.country.capital;
+            // ---
+
+
             List<User> checkedUsers = MainWindowVM.Users.ToList();
             checkedUsers.RemoveAt(0);
             LoginPopup loginPopup = new LoginPopup(checkedUsers)
