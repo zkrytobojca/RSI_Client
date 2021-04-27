@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:RSI_Client.Converters"
         xmlns:icons="clr-namespace:RSI_Client.Icons.XAML"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="450" MinWidth="500" Height="500" Width="800" Closing="ApplicationClosing">
+        Title="Events Bialystok" MinHeight="450" MinWidth="500" Height="500" Width="800" Closing="ApplicationClosing">
     <Window.Resources>
         <converters:NullToVisibleConverter x:Key="NullToVisibleConverter"/>
         <converters:NullToCollapsedConverter x:Key="NullToCollapsedConverter"/>
@@ -61,8 +61,8 @@
             <Button Name="ButtonAdminLogout"  Margin="5,5,5,5" Padding="5,5,5,5"  Click="UserLogoutButtonClick" Visibility="{Binding Path=LoggedUser,Converter={StaticResource NullToCollapsedConverter}, FallbackValue='Visible'}">Logout</Button>
         </StackPanel>
         <DockPanel Grid.Row="1" Grid.ColumnSpan="5" Margin="5,5,5,5">
-            <TabControl DockPanel.Dock="Top" Name="TabControlBooks" SelectionChanged="TabControlBooksChanged">
-                <TabItem Header="Available books" Name="TabItemAvailableBooks">
+            <TabControl DockPanel.Dock="Top" Name="TabControlBooks">
+                <TabItem Header="Available events" Name="TabItemAvailableBooks">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
@@ -75,36 +75,13 @@
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <!--Tutaj w itemsource trzeba bedzie dac usera 0 z mainwindowvm.users bo to ksiazki biblioteki-->
-                        <ListBox Name="ListOfAvailableBooks" Margin="5,5,5,5" Grid.ColumnSpan="3" HorizontalContentAlignment="Stretch" SelectionChanged="BookAvailableSelected" ItemTemplate="{StaticResource BookDataTemplate}" ItemsSource="{Binding MainWindowVM.Users[0].RentedBooks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"></ListBox>
+                        <ListBox Name="ListOfAvailableEvents" Margin="5,5,5,5" Grid.ColumnSpan="3" HorizontalContentAlignment="Stretch" SelectionChanged="BookAvailableSelected" ItemTemplate="{StaticResource BookDataTemplate}" ItemsSource="{Binding MainWindowVM.Users[0].SeenEvents, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"></ListBox>
                         <DockPanel Grid.Column="3" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="5" DataContext="{Binding ElementName=ListOfAvailableBooks,Path=SelectedItem}">
                             <Button DockPanel.Dock="Bottom" Name="BorrowButton" Margin="5" Content="Borrow book" DataContext="{Binding MainWindowVM, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" Visibility="{Binding Path=LoggedUser,Converter={StaticResource NullToCollapsedConverter}, FallbackValue='Visible'}"></Button>
                             <TextBlock DockPanel.Dock="Bottom" Name="TextBlockReleaseDateAvailable" Margin="5" HorizontalAlignment="Center" Text="{Binding Path=DisplayDate, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                             <TextBlock DockPanel.Dock="Bottom" Name="TextBlockAuthorsAvailable" Margin="5" HorizontalAlignment="Center" Text="{Binding Path=DisplayAuthors, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                             <TextBlock DockPanel.Dock="Bottom" Name="TextBlockBookTitleAvailable" Margin="5" HorizontalAlignment="Center" Style="{StaticResource BookTitleStyle}" Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                             <Image Name="ImageBookCoverAvailable" Stretch="Uniform" Margin="10,5" MaxWidth="1920" MaxHeight="1080" Source="{Binding Path=CoverImagePath, UpdateSourceTrigger=PropertyChanged,TargetNullValue={StaticResource DefaultCover}}"></Image>
-                        </DockPanel>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Borrowed books" Visibility="{Binding Path=LoggedUser,Converter={StaticResource NullToCollapsedConverter}, FallbackValue='Visible'}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="27*"></ColumnDefinition>
-                            <ColumnDefinition Width="128*"/>
-                            <ColumnDefinition Width="155*"></ColumnDefinition>
-                            <ColumnDefinition Width="155*"></ColumnDefinition>
-                            <ColumnDefinition Width="156*"></ColumnDefinition>
-                            <ColumnDefinition Width="155*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <ListBox Name="ListOfBorrowedBooks" Grid.ColumnSpan="4" Margin="5,5,5,5" HorizontalContentAlignment="Stretch" SelectionChanged="BookBorrowedSelected" ItemTemplate="{StaticResource BookDataTemplate}" ></ListBox>
-                        <DockPanel Grid.Column="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="5" DataContext="{Binding ElementName=ListOfBorrowedBooks,Path=SelectedItem}">
-                            <Button DockPanel.Dock="Bottom" Name="ReturnButton" Margin="5" Content="Return book"></Button>
-                            <TextBlock DockPanel.Dock="Bottom" Name="TextBlockReleaseDateBorrowed" Margin="5" HorizontalAlignment="Center" Text="{Binding Path=ReleaseDate, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                            <TextBlock DockPanel.Dock="Bottom" Name="TextBlockAuthorsBorrowed" Margin="5" HorizontalAlignment="Center" Text="{Binding Path=DisplayAuthors, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                            <TextBlock DockPanel.Dock="Bottom" Name="TextBlockBookTitleBorrowed" Margin="5" HorizontalAlignment="Center" Style="{StaticResource BookTitleStyle}" Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                            <Image Name="ImageBookCoverBorrowed" Stretch="Uniform" Margin="10,5" MaxWidth="1920" MaxHeight="1080" Source="{Binding Path=CoverImagePath, UpdateSourceTrigger=PropertyChanged,TargetNullValue={StaticResource DefaultCover} }"></Image>
                         </DockPanel>
                     </Grid>
                 </TabItem>

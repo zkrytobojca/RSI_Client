@@ -131,7 +131,7 @@
 
                     <DockPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="5">
                         <Label DockPanel.Dock="Top">User's Books</Label>
-                        <ListBox Name="ListBoxUsersBooks" DisplayMemberPath="DisplayBook"></ListBox>
+                        <ListBox Name="ListBoxUsersEvents" DisplayMemberPath="DisplayBook"></ListBox>
                     </DockPanel>
 
                     <Grid Grid.Row="5" Grid.Column="2">
@@ -172,14 +172,14 @@
                     </Grid.ColumnDefinitions>
                     <DockPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="5">
                         <Label DockPanel.Dock="Top">Avaliable Books</Label>
-                        <ListBox Name="ListBoxAvailableBooks" SelectionChanged="BookSelected" DisplayMemberPath="DisplayBook" ItemsSource="{Binding AdminWindowVM.Books, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AdminWindow}}}"></ListBox>
+                        <ListBox Name="ListBoxAvailableBooks" SelectionChanged="EventSelected" DisplayMemberPath="DisplayBook" ItemsSource="{Binding AdminWindowVM.Events, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AdminWindow}}}"></ListBox>
                     </DockPanel>
                     <Grid Grid.Row="5" Grid.Column="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Margin="5,5,5,5" Click="AddBookButtonClick">
+                        <Button Grid.Column="0" Margin="5,5,5,5" Click="AddEventButtonClick">
                             <StackPanel Orientation="Horizontal">
                                 <icons:plus Margin="5" Width="24" Height="24"></icons:plus>
                                 <TextBlock TextAlignment="Center" VerticalAlignment="Center">Add book</TextBlock>
@@ -223,16 +223,7 @@
                                     <ColumnDefinition Width="auto"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <Label Margin="5,5,5,5" Grid.Column="0" Content="Current owner:"></Label>
-                              
-                                <ComboBox Name="ComboBoxBookOwner" Grid.Column="1" Margin="5,5,5,5"  IsEnabled="{Binding ElementName=ListBoxAvailableBooks,Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}"  
-                                          DropDownClosed="BookOwnerChanged" ItemsSource="{Binding AdminWindowVM.Users, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AdminWindow}}}"
-                                          SelectedValue="{Binding Path=CurrentOwner, Mode=OneWay}" DisplayMemberPath="DisplayUser"></ComboBox>
                             </Grid>
-                            <Button Grid.Row="5" Cursor="Pen" Margin="5,0" Grid.ColumnSpan="2" Style="{StaticResource ImageButtonStyle}" Click="ButtonImagePickerClick">
-                                <Image Stretch="Uniform" Source="{Binding Path=CoverImagePath,FallbackValue={StaticResource DefaultCover},TargetNullValue={StaticResource DefaultCover}, UpdateSourceTrigger=PropertyChanged}"></Image>
-                                
-                            </Button>
                         </Grid>
                     </GroupBox>
 
@@ -255,89 +246,6 @@
                             <StackPanel Orientation="Horizontal">
                                 <icons:cross Width="24" Height="24" Margin="5"></icons:cross>
                                 <TextBlock TextAlignment="Center" VerticalAlignment="Center">Remove author</TextBlock>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
-                </Grid>
-
-
-            </TabItem>
-            <TabItem HorizontalAlignment="Stretch" Header="Authors" Name="TabItemAuthors">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <DockPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="5">
-                        <Label DockPanel.Dock="Top">Avaliable Authors</Label>
-                        <ListBox Name="ListBoxAvailableAuthors" SelectionChanged="AuthorSelected" DisplayMemberPath="DisplayAuthor" ItemsSource="{Binding AdminWindowVM.Authors, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AdminWindow}}}"></ListBox>
-                    </DockPanel>
-                    <Grid Grid.Row="5" Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Margin="5,5,5,5" Click="ButtonAddAuthorClick">
-                            <StackPanel Orientation="Horizontal">
-                                <icons:plus Margin="5" Width="24" Height="24"></icons:plus>
-                                <TextBlock TextAlignment="Center" VerticalAlignment="Center">Add author</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="1" Margin="5,5,5,5" Name="ButtonDeleteAuthor">
-                            <StackPanel Orientation="Horizontal">
-                                <icons:cross Width="24" Height="24" Margin="5"></icons:cross>
-                                <TextBlock TextAlignment="Center" VerticalAlignment="Center">Delete author</TextBlock>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
-                    <GroupBox Header="Edycja autora" Grid.Column="1" Grid.Row="0" Grid.RowSpan="5" Margin="2,0" DataContext="{Binding ElementName=ListBoxAvailableAuthors,Path=SelectedItem}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"></RowDefinition>
-                                <RowDefinition Height="Auto"></RowDefinition>
-                                <RowDefinition Height="Auto"></RowDefinition>
-                                <RowDefinition Height="Auto"></RowDefinition>
-                                <RowDefinition Height="Auto"></RowDefinition>
-                                <RowDefinition Height="*"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Label  Grid.Row="1" HorizontalContentAlignment="Center" Margin="5,5,5,5" VerticalAlignment="Center" Grid.ColumnSpan="2">Full name</Label>
-                            <TextBox  Grid.Row="2" Margin="5,5,5,5" Name="TextBoxAdminAuthorName"  IsEnabled="{Binding ElementName=ListBoxAvailableAuthors,Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}"  Grid.ColumnSpan="2" Text="{Binding Path=FullName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-
-                        </Grid>
-                    </GroupBox>
-
-                    <DockPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="5">
-                        <Label DockPanel.Dock="Top">Author's Books</Label>
-                        <ListBox Name="ListBoxAuthorsBooks" DisplayMemberPath="DisplayBook"></ListBox>
-                    </DockPanel>
-                    <Grid Grid.Row="5" Grid.Column="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Margin="5,5,5,5" Name="ButtonAuthorAddBook">
-                            <StackPanel Orientation="Horizontal">
-                                <icons:plus Margin="5" Width="24" Height="24"></icons:plus>
-                                <TextBlock TextAlignment="Center" VerticalAlignment="Center">Add book</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Grid.Column="1" Margin="5,5,5,5" Name="ButtonAuthorRemoveBook">
-                            <StackPanel Orientation="Horizontal">
-                                <icons:cross Width="24" Height="24" Margin="5"></icons:cross>
-                                <TextBlock TextAlignment="Center" VerticalAlignment="Center">Remove book</TextBlock>
                             </StackPanel>
                         </Button>
                     </Grid>

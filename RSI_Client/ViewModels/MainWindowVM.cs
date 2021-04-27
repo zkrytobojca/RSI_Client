@@ -11,14 +11,13 @@ namespace RSI_Client.ViewModels
 {
     public class MainWindowVM : INotifyPropertyChanged
     {
-        public ObservableCollection<Author> Authors { get; set; }
-        public ObservableCollection<Book> Books { get; set; }
+        public ObservableCollection<Event> Events { get; set; }
         public ObservableCollection<User> Users { get; set; }
         public MainWindowVM()
         {
-            Authors = new ObservableCollection<Author>();
-            Books = new ObservableCollection<Book>();
+            Events = new ObservableCollection<Event>();
             Users = new ObservableCollection<User>();
+            Users.Add(new User("admin","admin",true));
         }
         private User loggedUser;
      

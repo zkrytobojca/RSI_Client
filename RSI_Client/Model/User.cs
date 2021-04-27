@@ -27,8 +27,8 @@ namespace RSI_Client.Model
             }
         }
         public string Password { get; set; }
-        public List<int> BookIds { get; set; }
-        public virtual List<Book> RentedBooks { get; set; }
+        public virtual List<Event> SeenEvents { get; set; }
+
         private bool isAdmin;
         public bool IsAdmin
         {
@@ -44,12 +44,19 @@ namespace RSI_Client.Model
         }
         public User()
         {
-            RentedBooks = new List<Book>();
+            SeenEvents = new List<Event>();
         }
-        public User(string name)
+        public User(string username)
         {
-            Username = name;
-            RentedBooks = new List<Book>();
+            Username = username;
+            SeenEvents = new List<Event>();
+        }
+        public User(string username, string password, bool isAdmin)
+        {
+            Username = username;
+            Password = password;
+            IsAdmin = isAdmin;
+            SeenEvents = new List<Event>();
         }
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;

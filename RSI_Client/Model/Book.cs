@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace RSI_Client.Model
 {
     [Serializable]
-    public class Book:INotifyPropertyChanged
+    public class Book : INotifyPropertyChanged
     {
         #region Fields
         public int Id { get; set; }

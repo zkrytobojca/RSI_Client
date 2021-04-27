@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="649e27a9-7602-428e-b099-b3c06676e161" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="1ea23d79-abcf-40c2-90b0-b3175dc9f340" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,10 +19,10 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:8443/ws/countries.wsdl" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8443/ws/events.wsdl" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="countries.wsdl" MetadataType="Wsdl" ID="e9e6ec1b-241d-4371-b7ad-9e9aaccdf654" SourceId="1" SourceUrl="http://localhost:8443/ws/countries.wsdl" />
+    <MetadataFile FileName="events.wsdl" MetadataType="Wsdl" ID="34c2095c-d28e-4c0b-b592-7903d77528cd" SourceId="1" SourceUrl="http://localhost:8443/ws/events.wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

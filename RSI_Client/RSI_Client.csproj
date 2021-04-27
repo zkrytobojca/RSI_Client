@@ -68,7 +68,7 @@
     <Compile Include="BookListPopup.xaml.cs">
       <DependentUpon>BookListPopup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Connected Services\CountriesService\Reference.cs">
+    <Compile Include="Connected Services\EventsService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -103,6 +103,7 @@
     <Compile Include="LoginPopup.xaml.cs">
       <DependentUpon>LoginPopup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\Event.cs" />
     <Compile Include="RegisterPopup.xaml.cs">
       <DependentUpon>RegisterPopup.xaml</DependentUpon>
     </Compile>
@@ -205,11 +206,11 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="Icons\password.ttf" />
-    <None Include="Connected Services\CountriesService\countries.wsdl" />
-    <None Include="Connected Services\CountriesService\RSI_Client.CountriesService.getCountryResponse.datasource">
+    <None Include="Connected Services\EventsService\events.wsdl" />
+    <None Include="Connected Services\EventsService\RSI_Client.EventsService.event.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\CountriesService\RSI_Client.CountriesService.getCountryResponse1.datasource">
+    <None Include="Connected Services\EventsService\RSI_Client.EventsService.getAllEventsResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="packages.config" />
@@ -219,7 +220,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\PNG\book-open.png" />
@@ -236,16 +239,16 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\CountriesService\" />
+    <WCFMetadataStorage Include="Connected Services\EventsService\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\CountriesService\configuration91.svcinfo" />
+    <None Include="Connected Services\EventsService\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\CountriesService\configuration.svcinfo" />
+    <None Include="Connected Services\EventsService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\CountriesService\Reference.svcmap">
+    <None Include="Connected Services\EventsService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

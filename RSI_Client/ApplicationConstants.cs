@@ -9,7 +9,6 @@ namespace RSI_Client
     public static class ApplicationConstants
     {
         public static string[] userSearches = new string[] { "(Filter) None", "Name", "Book title", "Admin" };
-        public static string[] bookSearches = new string[] { "(Filter) None", "Title", "Older than (dd/MM/yyyy)", "Newer than (dd/MM/yyyy)", "Author name" };
-        public static string[] authorSearches = new string[] { "(Filter) None", "Name", "Book title" };
+        public static string[] eventSearches = new string[] { "(Filter) None", "Day", "Week" };
     }
 }
