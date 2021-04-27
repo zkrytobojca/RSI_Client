@@ -151,6 +151,17 @@ namespace RSI_Client.Model
             Year = year;
             Description = description;
         }
+        public Event(EventsService.@event ev)
+        {
+            Id = ev.id;
+            Name = ev.name;
+            Type = (int)ev.type;
+            Date = ev.date;
+            Week = ev.week;
+            Month = ev.month;
+            Year = ev.year;
+            Description = ev.description;
+        }
         #endregion Consctructors
     }
 }

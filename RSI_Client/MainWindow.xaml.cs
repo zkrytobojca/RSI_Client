@@ -58,13 +58,6 @@ namespace RSI_Client
 
         private void LoginButtonClick(object sender, RoutedEventArgs e)
         {
-            //
-            //EventsService.EventsPortClient client = new EventsService.EventsPortClient("EventsPortSoap11");
-            //EventsService.getAllEventsRequest request = new EventsService.getAllEventsRequest();
-            //EventsService.@event[] events = client.getAllEvents(request);
-            //
-
-
             List<User> checkedUsers = MainWindowVM.Users.ToList();
             LoginPopup loginPopup = new LoginPopup(checkedUsers)
             {
@@ -129,7 +122,14 @@ namespace RSI_Client
         }
         private void LoadObjects()
         {
+            EventsService.EventsPortClient client = new EventsService.EventsPortClient("EventsPortSoap11");
+            EventsService.getAllEventsRequest request = new EventsService.getAllEventsRequest();
+            EventsService.@event[] events = client.getAllEvents(request);
 
+            foreach(EventsService.@event ev in events)
+            {
+                MainWindowVM.Events.Add(new Event(ev));
+            }
         }
         private void SaveObjects()
         {
@@ -146,7 +146,7 @@ namespace RSI_Client
             ListOfAvailableEvents.SelectedIndex = 0;
         }
 
-        private void BookAvailableSelected(object sender, SelectionChangedEventArgs e)
+        private void EventAvailableSelected(object sender, SelectionChangedEventArgs e)
         {
             if (ListOfAvailableEvents.SelectedIndex >= 0 && ListOfAvailableEvents.SelectedIndex < MainWindowVM.Users[0].SeenEvents.Count)
             {

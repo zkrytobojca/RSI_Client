@@ -12,7 +12,7 @@
         <converters:NullToVisibleConverter x:Key="NullToVisibleConverter"/>
         <converters:NullToCollapsedConverter x:Key="NullToCollapsedConverter"/>
         <BitmapImage x:Key="DefaultCover" UriSource="Icons/PNG/book.png"/>
-        <DataTemplate x:Key="BookDataTemplate">
+        <DataTemplate x:Key="EventDataTemplate">
             <Border Margin="5" BorderThickness="1" BorderBrush="SteelBlue" CornerRadius="4">
                 <Grid Margin="3">
                     <Grid.RowDefinitions>
@@ -23,14 +23,14 @@
                         <ColumnDefinition Width="auto" SharedSizeGroup="ikona" />
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="1" FontWeight="Bold"  Margin="3" Text="{Binding Path=Title}"/>
-                    <TextBlock Grid.Column="1" Grid.Row="1"  Margin="3" Text="{Binding Path=DisplayAuthors}"/>
+                    <TextBlock Grid.Column="1" FontWeight="Bold"  Margin="3" Text="{Binding Path=Name}"/>
+                    <TextBlock Grid.Column="1" Grid.Row="1"  Margin="3" Text="{Binding Path=DisplayDescription}"/>
                     <Image Margin="15,5" Grid.RowSpan="2" MaxHeight="64" Width="64" Height="64"
                            Source="{Binding Path=CoverImagePath,FallbackValue={StaticResource DefaultCover},TargetNullValue={StaticResource DefaultCover}, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
             </Border>
         </DataTemplate>
-        <Style x:Key="BookTitleStyle" TargetType="TextBlock">
+        <Style x:Key="EventNameStyle" TargetType="TextBlock">
             <Setter Property="TextBlock.FontSize" Value="20" />
             <Setter Property="TextBlock.FontWeight" Value="Bold" />
         </Style>
@@ -75,12 +75,12 @@
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <!--Tutaj w itemsource trzeba bedzie dac usera 0 z mainwindowvm.users bo to ksiazki biblioteki-->
-                        <ListBox Name="ListOfAvailableEvents" Margin="5,5,5,5" Grid.ColumnSpan="3" HorizontalContentAlignment="Stretch" SelectionChanged="BookAvailableSelected" ItemTemplate="{StaticResource BookDataTemplate}" ItemsSource="{Binding MainWindowVM.Users[0].SeenEvents, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"></ListBox>
-                        <DockPanel Grid.Column="3" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="5" DataContext="{Binding ElementName=ListOfAvailableBooks,Path=SelectedItem}">
+                        <ListBox Name="ListOfAvailableEvents" Margin="5,5,5,5" Grid.ColumnSpan="3" HorizontalContentAlignment="Stretch" SelectionChanged="EventAvailableSelected" ItemTemplate="{StaticResource EventDataTemplate}" ItemsSource="{Binding MainWindowVM.Events, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"></ListBox>
+                        <DockPanel Grid.Column="3" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="5" DataContext="{Binding ElementName=ListOfAvailableEvents,Path=SelectedItem}">
                             <Button DockPanel.Dock="Bottom" Name="BorrowButton" Margin="5" Content="Borrow book" DataContext="{Binding MainWindowVM, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" Visibility="{Binding Path=LoggedUser,Converter={StaticResource NullToCollapsedConverter}, FallbackValue='Visible'}"></Button>
                             <TextBlock DockPanel.Dock="Bottom" Name="TextBlockReleaseDateAvailable" Margin="5" HorizontalAlignment="Center" Text="{Binding Path=DisplayDate, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                             <TextBlock DockPanel.Dock="Bottom" Name="TextBlockAuthorsAvailable" Margin="5" HorizontalAlignment="Center" Text="{Binding Path=DisplayAuthors, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                            <TextBlock DockPanel.Dock="Bottom" Name="TextBlockBookTitleAvailable" Margin="5" HorizontalAlignment="Center" Style="{StaticResource BookTitleStyle}" Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                            <TextBlock DockPanel.Dock="Bottom" Name="TextBlockBookTitleAvailable" Margin="5" HorizontalAlignment="Center" Style="{StaticResource EventNameStyle}" Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                             <Image Name="ImageBookCoverAvailable" Stretch="Uniform" Margin="10,5" MaxWidth="1920" MaxHeight="1080" Source="{Binding Path=CoverImagePath, UpdateSourceTrigger=PropertyChanged,TargetNullValue={StaticResource DefaultCover}}"></Image>
                         </DockPanel>
                     </Grid>
