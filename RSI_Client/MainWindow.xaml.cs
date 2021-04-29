@@ -135,14 +135,10 @@ namespace RSI_Client
         {
             
         }
-        public static RoutedCommand CommandBorrowEvent = new RoutedCommand();
-
-        public static RoutedCommand CommandReturnBook = new RoutedCommand();
 
         private void UserLogoutButtonClick(object sender, RoutedEventArgs e)
         {
             MainWindowVM.LoggedUser = null;
-            TabControlBooks.SelectedItem = TabItemAvailableBooks;
             ListOfAvailableEvents.SelectedIndex = 0;
         }
 
@@ -155,20 +151,20 @@ namespace RSI_Client
         }
 
         #region EventFilters
-        private bool FilterBookTitle(Object item)
+        private bool FilterNameEvent(Object item)
         {
-            Book book = (Book)item;
-            return book.Title.IndexOf(UserSearchTextBox.Text, StringComparison.OrdinalIgnoreCase) >= 0;
+            Event ev = (Event)item;
+            return ev.Name.IndexOf(UserSearchTextBox.Text, StringComparison.OrdinalIgnoreCase) >= 0;
         }
-        private bool FilterDateOlder(Object item)
+        private bool FilterDay(Object item)
         {
-            Book book = (Book)item;
+            Event ev = (Event)item;
             DateTime searchedDate;
             if (!DateTime.TryParseExact(UserSearchTextBox.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchedDate))
             {
                 return false;
             }
-            if (DateTime.Compare(book.ReleaseDate, searchedDate) > 0)
+            if (DateTime.Compare(ev.Date, searchedDate) > 0)
             {
                 return false;
             }
@@ -178,35 +174,15 @@ namespace RSI_Client
             }
 
         }
-        private bool FilterDateNewer(Object item)
+        private bool FilterWeek(Object item)
         {
-            Book book = (Book)item;
-            DateTime searchedDate;
-            if (!DateTime.TryParseExact(UserSearchTextBox.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchedDate))
+            Event ev = (Event)item;
+            int week = 0;
+            if (Int32.TryParse(UserSearchTextBox.Text, out week))
             {
-                return false;
+                return ev.Week == week;
             }
-            if (DateTime.Compare(book.ReleaseDate, searchedDate) < 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        private bool FilterBookAuthorName(Object item)
-        {
-            Book book = (Book)item;
-            foreach (Author a in book.AuthorList)
-            {
-                if (a.FullName.IndexOf(UserSearchTextBox.Text, StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    return true;
-                }
-
-            }
-            return false;
+            else return false;
         }
         #endregion EventFilters
 
@@ -234,22 +210,17 @@ namespace RSI_Client
                     }
                 case 1:
                     {
-                        CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = FilterBookTitle;
+                        CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = FilterNameEvent;
                         break;
                     }
                 case 2:
                     {
-                        CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = FilterDateOlder;
+                        CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = FilterDay;
                         break;
                     }
                 case 3:
                     {
-                        CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = FilterDateNewer;
-                        break;
-                    }
-                case 4:
-                    {
-                        CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = FilterBookAuthorName;
+                        CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = FilterWeek;
                         break;
                     }
                 default:
