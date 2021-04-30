@@ -101,14 +101,23 @@ namespace RSI_Client
         }
         private void LoadObjects()
         {
-            EventsService.EventsPortClient client = new EventsService.EventsPortClient("EventsPortSoap11");
-            EventsService.getAllEventsRequest request = new EventsService.getAllEventsRequest();
-            EventsService.@event[] events = client.getAllEvents(request);
-
-            foreach(EventsService.@event ev in events)
+            try
             {
-                MainWindowVM.Events.Add(new Event(ev));
+                EventsService.EventsPortClient client = new EventsService.EventsPortClient("EventsPortSoap11");
+                EventsService.getAllEventsRequest request = new EventsService.getAllEventsRequest();
+                EventsService.@event[] events = client.getAllEvents(request);
+
+                foreach(EventsService.@event ev in events)
+                {
+                    MainWindowVM.Events.Add(new Event(ev));
+                }
             }
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e.Message);
+            }
+
+            MainWindowVM.Users.Add(new User("admin", "admin", true));
         }
         private void SaveObjects()
         {

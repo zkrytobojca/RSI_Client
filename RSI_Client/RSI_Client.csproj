@@ -62,12 +62,6 @@
       <DependentUpon>AdminWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ApplicationConstants.cs" />
-    <Compile Include="AuthorListPopup.xaml.cs">
-      <DependentUpon>AuthorListPopup.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BookListPopup.xaml.cs">
-      <DependentUpon>BookListPopup.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Connected Services\EventsService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -111,14 +105,6 @@
     <Compile Include="ViewModels\AdminWindowVM.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
     <Page Include="AdminWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="AuthorListPopup.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="BookListPopup.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -185,8 +171,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Author.cs" />
-    <Compile Include="Model\Book.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

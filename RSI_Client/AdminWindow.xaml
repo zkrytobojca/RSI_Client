@@ -38,7 +38,6 @@
             <Button DockPanel.Dock="Right" Padding="5,5,5,5" Click="SearchButtonClick">
                 <icons:search Width="25" Height="25"></icons:search>
             </Button>
-            <!--Dodac reakcje na wcisniecie przycisku enter-->
             <TextBox DockPanel.Dock="Left" Name="TextBoxAdminSearch" VerticalContentAlignment="Center" KeyDown="SearchEnterPressed"></TextBox>
         </DockPanel>
         <ComboBox Name="ComboBoxSearchType" Grid.Row="0"  Grid.Column="3" Margin="5,5,5,5" SelectedIndex="0" DropDownClosed="SearchSelected" VerticalContentAlignment="Center">
@@ -71,6 +70,7 @@
                         <ListBox Name="ListBoxAvailableUsers" SelectionChanged="UserSelected" AlternationCount="2147483647" DisplayMemberPath="DisplayUser" ItemsSource="{Binding AdminWindowVM.Users, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AdminWindow}}}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="{x:Type ListBoxItem}">
+                                    <!--Do usuniecia jesli admin ma byc widoczny-->
                                     <Style.Triggers>
                                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                                             <Setter Property="Visibility" Value="Collapsed"></Setter>

@@ -17,7 +17,6 @@ namespace RSI_Client.ViewModels
         {
             Events = new ObservableCollection<Event>();
             Users = new ObservableCollection<User>();
-            Users.Add(new User("admin","admin",true));
         }
         private User loggedUser;
      
