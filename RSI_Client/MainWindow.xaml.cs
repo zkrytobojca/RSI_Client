@@ -81,7 +81,6 @@ namespace RSI_Client
                         Visibility = Visibility.Visible;
                         ListOfAvailableEvents.Items.Refresh();
                         ListOfAvailableEvents.SelectedIndex = 0;
-
                     }
                     else
                     {
@@ -99,26 +98,6 @@ namespace RSI_Client
             {
                 RegisterButtonClick(sender, e);
             }
-        }
-        private void TESTOKNA(object sender, RoutedEventArgs e)
-        {
-
-            AdminWindow adminWindow = new AdminWindow(MainWindowVM.Events, MainWindowVM.Users)
-            {
-                Owner = this,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
-            Visibility = Visibility.Collapsed;
-            adminWindow.ShowDialog();
-            if ((bool)adminWindow.DialogResult)
-            {
-                Visibility = Visibility.Visible;
-            }
-            else
-            {
-                Close();
-            }
-
         }
         private void LoadObjects()
         {

@@ -61,8 +61,8 @@
             <Button Name="ButtonAdminLogout"  Margin="5,5,5,5" Padding="5,5,5,5"  Click="UserLogoutButtonClick" Visibility="{Binding Path=LoggedUser,Converter={StaticResource NullToCollapsedConverter}, FallbackValue='Visible'}">Logout</Button>
         </StackPanel>
         <DockPanel Grid.Row="1" Grid.ColumnSpan="5" Margin="5,5,5,5">
-            <TabControl DockPanel.Dock="Top" Name="TabControlBooks">
-                <TabItem Header="Available events" Name="TabItemAvailableBooks">
+            <TabControl DockPanel.Dock="Top" Name="TabControlEvents">
+                <TabItem Header="Available events" Name="TabItemAvailableEvents">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
@@ -76,10 +76,24 @@
                         </Grid.ColumnDefinitions>
                         <!--Tutaj w itemsource trzeba bedzie dac usera 0 z mainwindowvm.users bo to ksiazki biblioteki-->
                         <ListBox Name="ListOfAvailableEvents" Margin="5,5,5,5" Grid.ColumnSpan="3" HorizontalContentAlignment="Stretch" SelectionChanged="EventAvailableSelected" ItemTemplate="{StaticResource EventDataTemplate}" ItemsSource="{Binding MainWindowVM.Events, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"></ListBox>
-                        <DockPanel Grid.Column="3" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="5" DataContext="{Binding ElementName=ListOfAvailableEvents,Path=SelectedItem}">
+                        <DockPanel Grid.Column="3" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="5" DataContext="{Binding ElementName=ListOfAvailableEvents,Path=SelectedItem}" Visibility="{Binding ElementName=ListOfAvailableEvents,Path=SelectedItem, Converter={StaticResource NullToCollapsedConverter}, FallbackValue='Collapsed'}">
                             <TextBlock DockPanel.Dock="Bottom" Name="TextBlockDescriptionAvailable" Margin="5" HorizontalAlignment="Center" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                            <TextBlock DockPanel.Dock="Bottom" Name="TextBlockTypeAvailable" Margin="5" HorizontalAlignment="Center" Text="{Binding Path=Type, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                            <TextBlock DockPanel.Dock="Bottom" Name="TextBlockDateAvailable" Margin="5" HorizontalAlignment="Center" Text="{Binding Path=Date, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Margin="5" HorizontalAlignment="Center" FontWeight="Bold">Week:</TextBlock>
+                                <TextBlock Name="TextBlockWeekAvailable" Margin="5" HorizontalAlignment="Center" Text="{Binding Path=Week, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                                <TextBlock Margin="5" HorizontalAlignment="Center" FontWeight="Bold">Month:</TextBlock>
+                                <TextBlock Name="TextBlockMonthAvailable" Margin="5" HorizontalAlignment="Center" Text="{Binding Path=Month, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                                <TextBlock Margin="5" HorizontalAlignment="Center" FontWeight="Bold">Year:</TextBlock>
+                                <TextBlock Name="TextBlockYearAvailable" Margin="5" HorizontalAlignment="Center" Text="{Binding Path=Year, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                            </StackPanel>
+                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Margin="5" HorizontalAlignment="Center" FontWeight="Bold">Date:</TextBlock>
+                                <TextBlock Name="TextBlockDateAvailable" Margin="5" HorizontalAlignment="Center" Text="{Binding Path=Date, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                            </StackPanel>
+                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Margin="5" HorizontalAlignment="Center" FontWeight="Bold">Type:</TextBlock>
+                                <TextBlock Name="TextBlockTypeAvailable" Margin="5" HorizontalAlignment="Center" Text="{Binding Path=Type, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                            </StackPanel>
                             <TextBlock DockPanel.Dock="Bottom" Name="TextBlockEventNameAvailable" Margin="5" HorizontalAlignment="Center" Style="{StaticResource EventNameStyle}" Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                         </DockPanel>
                     </Grid>

@@ -34,10 +34,10 @@ namespace RSI_Client
 
             InitializeComponent();
             ComboBoxSearchType.ItemsSource = ApplicationConstants.userSearches;
-            CommandBinding commandRemoveBookBinding = new CommandBinding(
-            CommandDeleteBook, ExecutedDeleteBook, CanExecuteDeleteEvent);
-            CommandBindings.Add(commandRemoveBookBinding);
-            ButtonDeleteBook.Command = CommandDeleteBook;
+            CommandBinding commandRemoveEventBinding = new CommandBinding(
+            CommandDeleteEvent, ExecutedDeleteEvent, CanExecuteDeleteEvent);
+            CommandBindings.Add(commandRemoveEventBinding);
+            ButtonDeleteBook.Command = CommandDeleteEvent;
             CommandBinding commandDeleteUserBinding = new CommandBinding(
             CommandDeleteUser, ExecutedDeleteUser, CanExecuteDeleteUser);
             CommandBindings.Add(commandDeleteUserBinding);
@@ -52,36 +52,27 @@ namespace RSI_Client
 
         private void EventSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (ListBoxAvailableBooks.SelectedIndex >= 0 && ListBoxAvailableBooks.SelectedIndex < AdminWindowVM.Events.Count)
+            if (ListBoxAvailableEvents.SelectedIndex >= 0 && ListBoxAvailableEvents.SelectedIndex < AdminWindowVM.Events.Count)
             {
-                SelectedEvent = AdminWindowVM.Events[ListBoxAvailableBooks.SelectedIndex];
-            }
-            else
-            {
-                ListBoxBooksAuthors.ItemsSource = null;
+                SelectedEvent = AdminWindowVM.Events[ListBoxAvailableEvents.SelectedIndex];
             }
         }
 
         #region CommandRemoveEvent
-        public static RoutedCommand CommandDeleteBook = new RoutedCommand();
-        private void ExecutedDeleteBook(object sender, ExecutedRoutedEventArgs e)
+        public static RoutedCommand CommandDeleteEvent = new RoutedCommand();
+        private void ExecutedDeleteEvent(object sender, ExecutedRoutedEventArgs e)
         {
-            int tempIndex = ListBoxAvailableBooks.SelectedIndex;
+            int tempIndex = ListBoxAvailableEvents.SelectedIndex;
             Event removed = AdminWindowVM.Events[tempIndex];
             AdminWindowVM.Events.Remove(removed);
-            if (AdminWindowVM.Events.Count <= 0)
+            if (AdminWindowVM.Events.Count > 0)
             {
-                ListBoxBooksAuthors.ItemsSource = null;
+                ListBoxAvailableEvents.SelectedIndex = tempIndex - 1;
             }
-            else
-            {
-                ListBoxAvailableBooks.SelectedIndex = tempIndex - 1;
-            }
-
         }
         private void CanExecuteDeleteEvent(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (ListBoxAvailableBooks.SelectedIndex >= 0 && ListBoxAvailableBooks.SelectedIndex < AdminWindowVM.Events.Count)
+            if (ListBoxAvailableEvents.SelectedIndex >= 0 && ListBoxAvailableEvents.SelectedIndex < AdminWindowVM.Events.Count)
             {
                 e.CanExecute = true;
             }
@@ -105,12 +96,12 @@ namespace RSI_Client
             if (ListBoxAvailableUsers.SelectedIndex >= 0 && ListBoxAvailableUsers.SelectedIndex < AdminWindowVM.Users.Count)
             {
                 SelectedUser = AdminWindowVM.Users[ListBoxAvailableUsers.SelectedIndex];
-                ListBoxUsersEvents.ItemsSource = SelectedUser.SeenEvents;
+                ListBoxAvailableEvents.ItemsSource = SelectedUser.SeenEvents;
 
             }
             else
             {
-                ListBoxUsersEvents.ItemsSource = null;
+                ListBoxAvailableEvents.ItemsSource = null;
             }
         }
         #region CommandRemoveUser
@@ -122,7 +113,7 @@ namespace RSI_Client
             AdminWindowVM.Users.Remove(removed);
             if (AdminWindowVM.Users.Count <= 1)
             {
-                ListBoxUsersEvents.ItemsSource = null;
+                ListBoxAvailableEvents.ItemsSource = null;
             }
             else
             {
@@ -148,14 +139,13 @@ namespace RSI_Client
         private void FilterReset()
         {
             CollectionViewSource.GetDefaultView(ListBoxAvailableUsers.ItemsSource).Filter = null;
-            CollectionViewSource.GetDefaultView(ListBoxAvailableBooks.ItemsSource).Filter = null;
+            CollectionViewSource.GetDefaultView(ListBoxAvailableEvents.ItemsSource).Filter = null;
         }
         private void AdminTabControlChanged(object sender, SelectionChangedEventArgs e)
         {
             if(e.Source is TabControl&&IsActive)
             {
-               
-                if (TabItemBooks.IsSelected)
+                if (TabItemEvents.IsSelected)
                 {
                     ComboBoxSearchType.ItemsSource = ApplicationConstants.eventSearches;
                 }
@@ -169,21 +159,21 @@ namespace RSI_Client
             }
             
         }
-        #region BookFilters
-        private bool FilterBookTitle(Object item)
+        #region EventFilters
+        private bool FilterNameEvent(Object item)
         {
-            Book book = (Book)item;
-            return book.Title.IndexOf(TextBoxAdminSearch.Text, StringComparison.OrdinalIgnoreCase) >= 0;
+            Event ev = (Event)item;
+            return ev.Name.IndexOf(TextBoxAdminSearch.Text, StringComparison.OrdinalIgnoreCase) >= 0;
         }
-        private bool FilterDateOlder(Object item)
+        private bool FilterDay(Object item)
         {
-            Book book = (Book)item;
+            Event ev = (Event)item;
             DateTime searchedDate;
             if (!DateTime.TryParseExact(TextBoxAdminSearch.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchedDate))
             {
                 return false;
             }
-            if (DateTime.Compare(book.ReleaseDate,searchedDate) > 0)
+            if (DateTime.Compare(ev.Date, searchedDate) > 0)
             {
                 return false;
             }
@@ -193,37 +183,17 @@ namespace RSI_Client
             }
 
         }
-        private bool FilterDateNewer(Object item)
+        private bool FilterWeek(Object item)
         {
-            Book book = (Book)item;
-            DateTime searchedDate;
-            if(!DateTime.TryParseExact(TextBoxAdminSearch.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture,DateTimeStyles.None, out searchedDate))
+            Event ev = (Event)item;
+            int week = 0;
+            if (Int32.TryParse(TextBoxAdminSearch.Text, out week))
             {
-                return false;
+                return ev.Week == week;
             }
-            if (DateTime.Compare(book.ReleaseDate, searchedDate) < 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            else return false;
         }
-        private bool FilterBookAuthorName(Object item)
-        {
-            Book book = (Book)item;
-            foreach(Author a in book.AuthorList)
-            {
-                if(a.FullName.IndexOf(TextBoxAdminSearch.Text,StringComparison.OrdinalIgnoreCase)>=0)
-                {
-                    return true;
-                }
-
-            }
-            return false;
-        }
-        #endregion BookFilters
+        #endregion EventFilters
         #region UserFilters
         private bool FilterUserName(Object item)
         {
@@ -244,31 +214,9 @@ namespace RSI_Client
             return user.IsAdmin;
         }
         #endregion UserFilters
-        #region AuthorFilters
-        private bool FilterAuthorName(Object item)
-        {
-            Author author = (Author)item;
-            return author.FullName.IndexOf(TextBoxAdminSearch.Text, StringComparison.OrdinalIgnoreCase) >= 0;
-        }
-        private bool FilterAuthorBookTitle(Object item)
-        {
-            Author author = (Author)item;
-            foreach (Book b in author.WrittenBooks)
-            {
-                if (b.Title.IndexOf(TextBoxAdminSearch.Text, StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    return true;
-                }
-
-            }
-            return false;
-        }
-
-        #endregion AuthorFilters
         #region FilterMethods
         private void SearchSelected(object sender, EventArgs e)
         {
-           
             DoFilter();
         }
         private void DoFilter()
@@ -277,7 +225,7 @@ namespace RSI_Client
             {
                 FilterUser();
             }
-            else if(TabItemBooks.IsSelected)
+            else if(TabItemEvents.IsSelected)
             {
                 FilterBook();
             }
@@ -324,35 +272,29 @@ namespace RSI_Client
             {
                 case 0:
                     {
-                        CollectionViewSource.GetDefaultView(ListBoxAvailableBooks.ItemsSource).Filter = null;
+                        CollectionViewSource.GetDefaultView(ListBoxAvailableEvents.ItemsSource).Filter = null;
                         break;
                     }
                 case 1:
                     {
-                        CollectionViewSource.GetDefaultView(ListBoxAvailableBooks.ItemsSource).Filter = FilterBookTitle;
+                        CollectionViewSource.GetDefaultView(ListBoxAvailableEvents.ItemsSource).Filter = FilterNameEvent;
                         break;
                     }
                 case 2:
                     {
-                        CollectionViewSource.GetDefaultView(ListBoxAvailableBooks.ItemsSource).Filter = FilterDateOlder;
+                        CollectionViewSource.GetDefaultView(ListBoxAvailableEvents.ItemsSource).Filter = FilterDay;
                         break;
                     }
                 case 3:
                     {
-                        CollectionViewSource.GetDefaultView(ListBoxAvailableBooks.ItemsSource).Filter = FilterDateNewer;
-                        break;
-                    }
-                case 4:
-                    {
-                        CollectionViewSource.GetDefaultView(ListBoxAvailableBooks.ItemsSource).Filter = FilterBookAuthorName;
+                        CollectionViewSource.GetDefaultView(ListBoxAvailableEvents.ItemsSource).Filter = FilterWeek;
                         break;
                     }
                 default:
                     {
-                        CollectionViewSource.GetDefaultView(ListBoxAvailableBooks.ItemsSource).Filter = null;
+                        CollectionViewSource.GetDefaultView(ListBoxAvailableEvents.ItemsSource).Filter = null;
                         break;
                     }
-
             }
         }
         #endregion FilterMethods
@@ -365,16 +307,6 @@ namespace RSI_Client
         {
             DialogResult = true;
             Close();
-        }
-
-        private void ButtonPrintBooksClick(object sender, RoutedEventArgs e)
-        {
-            if(SelectedUser!=null)
-            {
-                PrintDialog printDlg = new PrintDialog();
-                printDlg.PrintVisual(ListBoxUsersEvents, SelectedUser.Username + " events" );
-            }
-            
         }
     }
 }
