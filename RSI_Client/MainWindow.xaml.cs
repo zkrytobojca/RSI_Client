@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RSI_Client.EventsService;
 using RSI_Client.Model;
 using RSI_Client.ViewModels;
 
@@ -103,14 +105,15 @@ namespace RSI_Client
         {
             try
             {
-                EventsService.EventsPortClient client = new EventsService.EventsPortClient("EventsPortSoap11");
-                EventsService.getAllEventsRequest request = new EventsService.getAllEventsRequest();
-                EventsService.@event[] events = client.getAllEvents(request);
+                var client = new EventsPortClient("EventsPortSoap11");
+                getAllEventsRequest request = new getAllEventsRequest();
+                @event[] events = client.getAllEvents(request);
 
-                foreach(EventsService.@event ev in events)
+                foreach (@event ev in events)
                 {
                     MainWindowVM.Events.Add(new Event(ev));
                 }
+
             }
             catch (Exception e)
             {

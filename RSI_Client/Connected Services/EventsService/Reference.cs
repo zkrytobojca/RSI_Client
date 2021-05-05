@@ -12,7 +12,7 @@ namespace RSI_Client.EventsService {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="localhost:8443", ConfigurationName="EventsService.EventsPort")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="http://ws.event.bialystok.com", ConfigurationName="EventsService.EventsPort")]
     public interface EventsPort {
         
         // CODEGEN: Generating message contract since the operation getAllEvents is neither RPC nor document wrapped.
@@ -20,8 +20,30 @@ namespace RSI_Client.EventsService {
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         RSI_Client.EventsService.getAllEventsResponse getAllEvents(RSI_Client.EventsService.getAllEventsRequest1 request);
         
+        // CODEGEN: Generating message contract since the operation addEvent is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
-        System.Threading.Tasks.Task<RSI_Client.EventsService.getAllEventsResponse> getAllEventsAsync(RSI_Client.EventsService.getAllEventsRequest1 request);
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        RSI_Client.EventsService.addEventResponse1 addEvent(RSI_Client.EventsService.addEventRequest1 request);
+        
+        // CODEGEN: Generating message contract since the operation getEventsByWeek is neither RPC nor document wrapped.
+        [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        RSI_Client.EventsService.getEventsByWeekResponse getEventsByWeek(RSI_Client.EventsService.getEventsByWeekRequest1 request);
+        
+        // CODEGEN: Generating message contract since the operation getEventDetailsById is neither RPC nor document wrapped.
+        [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        RSI_Client.EventsService.getEventDetailsByIdResponse1 getEventDetailsById(RSI_Client.EventsService.getEventDetailsByIdRequest1 request);
+        
+        // CODEGEN: Generating message contract since the operation generateEventsPDF is neither RPC nor document wrapped.
+        [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        RSI_Client.EventsService.generateEventsPDFResponse1 generateEventsPDF(RSI_Client.EventsService.generateEventsPDFRequest1 request);
+        
+        // CODEGEN: Generating message contract since the operation getEventsByDate is neither RPC nor document wrapped.
+        [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        RSI_Client.EventsService.getEventsByDateResponse getEventsByDate(RSI_Client.EventsService.getEventsByDateRequest1 request);
     }
     
     /// <remarks/>
@@ -40,6 +62,135 @@ namespace RSI_Client.EventsService {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ws.event.bialystok.com")]
+    public partial class eventDto : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private string nameField;
+        
+        private type typeField;
+        
+        private System.DateTime dateField;
+        
+        private int weekField;
+        
+        private int monthField;
+        
+        private int yearField;
+        
+        private string descriptionField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public string name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+                this.RaisePropertyChanged("name");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        public type type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+                this.RaisePropertyChanged("type");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=2)]
+        public System.DateTime date {
+            get {
+                return this.dateField;
+            }
+            set {
+                this.dateField = value;
+                this.RaisePropertyChanged("date");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
+        public int week {
+            get {
+                return this.weekField;
+            }
+            set {
+                this.weekField = value;
+                this.RaisePropertyChanged("week");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
+        public int month {
+            get {
+                return this.monthField;
+            }
+            set {
+                this.monthField = value;
+                this.RaisePropertyChanged("month");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
+        public int year {
+            get {
+                return this.yearField;
+            }
+            set {
+                this.yearField = value;
+                this.RaisePropertyChanged("year");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
+        public string description {
+            get {
+                return this.descriptionField;
+            }
+            set {
+                this.descriptionField = value;
+                this.RaisePropertyChanged("description");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ws.event.bialystok.com")]
+    public enum type {
+        
+        /// <remarks/>
+        SPORT,
+        
+        /// <remarks/>
+        CULTURAL,
     }
     
     /// <remarks/>
@@ -172,19 +323,6 @@ namespace RSI_Client.EventsService {
         }
     }
     
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ws.event.bialystok.com")]
-    public enum type {
-        
-        /// <remarks/>
-        SPORT,
-        
-        /// <remarks/>
-        CULTURAL,
-    }
-    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -217,6 +355,420 @@ namespace RSI_Client.EventsService {
         
         public getAllEventsResponse(RSI_Client.EventsService.@event[] getAllEventsResponse1) {
             this.getAllEventsResponse1 = getAllEventsResponse1;
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
+    public partial class addEventRequest : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private eventDto eventDtoField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public eventDto eventDto {
+            get {
+                return this.eventDtoField;
+            }
+            set {
+                this.eventDtoField = value;
+                this.RaisePropertyChanged("eventDto");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
+    public partial class addEventResponse : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private @event eventDetailsField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public @event eventDetails {
+            get {
+                return this.eventDetailsField;
+            }
+            set {
+                this.eventDetailsField = value;
+                this.RaisePropertyChanged("eventDetails");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class addEventRequest1 {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.event.bialystok.com", Order=0)]
+        public RSI_Client.EventsService.addEventRequest addEventRequest;
+        
+        public addEventRequest1() {
+        }
+        
+        public addEventRequest1(RSI_Client.EventsService.addEventRequest addEventRequest) {
+            this.addEventRequest = addEventRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class addEventResponse1 {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.event.bialystok.com", Order=0)]
+        public RSI_Client.EventsService.addEventResponse addEventResponse;
+        
+        public addEventResponse1() {
+        }
+        
+        public addEventResponse1(RSI_Client.EventsService.addEventResponse addEventResponse) {
+            this.addEventResponse = addEventResponse;
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
+    public partial class getEventsByWeekRequest : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private int weekField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public int week {
+            get {
+                return this.weekField;
+            }
+            set {
+                this.weekField = value;
+                this.RaisePropertyChanged("week");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getEventsByWeekRequest1 {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.event.bialystok.com", Order=0)]
+        public RSI_Client.EventsService.getEventsByWeekRequest getEventsByWeekRequest;
+        
+        public getEventsByWeekRequest1() {
+        }
+        
+        public getEventsByWeekRequest1(RSI_Client.EventsService.getEventsByWeekRequest getEventsByWeekRequest) {
+            this.getEventsByWeekRequest = getEventsByWeekRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getEventsByWeekResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="getEventsByWeekResponse", Namespace="http://ws.event.bialystok.com", Order=0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("eventList", IsNullable=false)]
+        public RSI_Client.EventsService.@event[] getEventsByWeekResponse1;
+        
+        public getEventsByWeekResponse() {
+        }
+        
+        public getEventsByWeekResponse(RSI_Client.EventsService.@event[] getEventsByWeekResponse1) {
+            this.getEventsByWeekResponse1 = getEventsByWeekResponse1;
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
+    public partial class getEventDetailsByIdRequest : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private int idField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public int id {
+            get {
+                return this.idField;
+            }
+            set {
+                this.idField = value;
+                this.RaisePropertyChanged("id");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
+    public partial class getEventDetailsByIdResponse : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private @event eventDetailsField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public @event eventDetails {
+            get {
+                return this.eventDetailsField;
+            }
+            set {
+                this.eventDetailsField = value;
+                this.RaisePropertyChanged("eventDetails");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getEventDetailsByIdRequest1 {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.event.bialystok.com", Order=0)]
+        public RSI_Client.EventsService.getEventDetailsByIdRequest getEventDetailsByIdRequest;
+        
+        public getEventDetailsByIdRequest1() {
+        }
+        
+        public getEventDetailsByIdRequest1(RSI_Client.EventsService.getEventDetailsByIdRequest getEventDetailsByIdRequest) {
+            this.getEventDetailsByIdRequest = getEventDetailsByIdRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getEventDetailsByIdResponse1 {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.event.bialystok.com", Order=0)]
+        public RSI_Client.EventsService.getEventDetailsByIdResponse getEventDetailsByIdResponse;
+        
+        public getEventDetailsByIdResponse1() {
+        }
+        
+        public getEventDetailsByIdResponse1(RSI_Client.EventsService.getEventDetailsByIdResponse getEventDetailsByIdResponse) {
+            this.getEventDetailsByIdResponse = getEventDetailsByIdResponse;
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
+    public partial class generateEventsPDFRequest : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
+    public partial class generateEventsPDFResponse : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private byte[] contentField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", Order=0)]
+        public byte[] content {
+            get {
+                return this.contentField;
+            }
+            set {
+                this.contentField = value;
+                this.RaisePropertyChanged("content");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class generateEventsPDFRequest1 {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.event.bialystok.com", Order=0)]
+        public RSI_Client.EventsService.generateEventsPDFRequest generateEventsPDFRequest;
+        
+        public generateEventsPDFRequest1() {
+        }
+        
+        public generateEventsPDFRequest1(RSI_Client.EventsService.generateEventsPDFRequest generateEventsPDFRequest) {
+            this.generateEventsPDFRequest = generateEventsPDFRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class generateEventsPDFResponse1 {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.event.bialystok.com", Order=0)]
+        public RSI_Client.EventsService.generateEventsPDFResponse generateEventsPDFResponse;
+        
+        public generateEventsPDFResponse1() {
+        }
+        
+        public generateEventsPDFResponse1(RSI_Client.EventsService.generateEventsPDFResponse generateEventsPDFResponse) {
+            this.generateEventsPDFResponse = generateEventsPDFResponse;
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
+    public partial class getEventsByDateRequest : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private System.DateTime dateField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=0)]
+        public System.DateTime date {
+            get {
+                return this.dateField;
+            }
+            set {
+                this.dateField = value;
+                this.RaisePropertyChanged("date");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getEventsByDateRequest1 {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.event.bialystok.com", Order=0)]
+        public RSI_Client.EventsService.getEventsByDateRequest getEventsByDateRequest;
+        
+        public getEventsByDateRequest1() {
+        }
+        
+        public getEventsByDateRequest1(RSI_Client.EventsService.getEventsByDateRequest getEventsByDateRequest) {
+            this.getEventsByDateRequest = getEventsByDateRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class getEventsByDateResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="getEventsByDateResponse", Namespace="http://ws.event.bialystok.com", Order=0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("eventList", IsNullable=false)]
+        public RSI_Client.EventsService.@event[] getEventsByDateResponse1;
+        
+        public getEventsByDateResponse() {
+        }
+        
+        public getEventsByDateResponse(RSI_Client.EventsService.@event[] getEventsByDateResponse1) {
+            this.getEventsByDateResponse1 = getEventsByDateResponse1;
         }
     }
     
@@ -260,14 +812,63 @@ namespace RSI_Client.EventsService {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<RSI_Client.EventsService.getAllEventsResponse> RSI_Client.EventsService.EventsPort.getAllEventsAsync(RSI_Client.EventsService.getAllEventsRequest1 request) {
-            return base.Channel.getAllEventsAsync(request);
+        RSI_Client.EventsService.addEventResponse1 RSI_Client.EventsService.EventsPort.addEvent(RSI_Client.EventsService.addEventRequest1 request) {
+            return base.Channel.addEvent(request);
         }
         
-        public System.Threading.Tasks.Task<RSI_Client.EventsService.getAllEventsResponse> getAllEventsAsync(RSI_Client.EventsService.getAllEventsRequest getAllEventsRequest) {
-            RSI_Client.EventsService.getAllEventsRequest1 inValue = new RSI_Client.EventsService.getAllEventsRequest1();
-            inValue.getAllEventsRequest = getAllEventsRequest;
-            return ((RSI_Client.EventsService.EventsPort)(this)).getAllEventsAsync(inValue);
+        public RSI_Client.EventsService.addEventResponse addEvent(RSI_Client.EventsService.addEventRequest addEventRequest) {
+            RSI_Client.EventsService.addEventRequest1 inValue = new RSI_Client.EventsService.addEventRequest1();
+            inValue.addEventRequest = addEventRequest;
+            RSI_Client.EventsService.addEventResponse1 retVal = ((RSI_Client.EventsService.EventsPort)(this)).addEvent(inValue);
+            return retVal.addEventResponse;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        RSI_Client.EventsService.getEventsByWeekResponse RSI_Client.EventsService.EventsPort.getEventsByWeek(RSI_Client.EventsService.getEventsByWeekRequest1 request) {
+            return base.Channel.getEventsByWeek(request);
+        }
+        
+        public RSI_Client.EventsService.@event[] getEventsByWeek(RSI_Client.EventsService.getEventsByWeekRequest getEventsByWeekRequest) {
+            RSI_Client.EventsService.getEventsByWeekRequest1 inValue = new RSI_Client.EventsService.getEventsByWeekRequest1();
+            inValue.getEventsByWeekRequest = getEventsByWeekRequest;
+            RSI_Client.EventsService.getEventsByWeekResponse retVal = ((RSI_Client.EventsService.EventsPort)(this)).getEventsByWeek(inValue);
+            return retVal.getEventsByWeekResponse1;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        RSI_Client.EventsService.getEventDetailsByIdResponse1 RSI_Client.EventsService.EventsPort.getEventDetailsById(RSI_Client.EventsService.getEventDetailsByIdRequest1 request) {
+            return base.Channel.getEventDetailsById(request);
+        }
+        
+        public RSI_Client.EventsService.getEventDetailsByIdResponse getEventDetailsById(RSI_Client.EventsService.getEventDetailsByIdRequest getEventDetailsByIdRequest) {
+            RSI_Client.EventsService.getEventDetailsByIdRequest1 inValue = new RSI_Client.EventsService.getEventDetailsByIdRequest1();
+            inValue.getEventDetailsByIdRequest = getEventDetailsByIdRequest;
+            RSI_Client.EventsService.getEventDetailsByIdResponse1 retVal = ((RSI_Client.EventsService.EventsPort)(this)).getEventDetailsById(inValue);
+            return retVal.getEventDetailsByIdResponse;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        RSI_Client.EventsService.generateEventsPDFResponse1 RSI_Client.EventsService.EventsPort.generateEventsPDF(RSI_Client.EventsService.generateEventsPDFRequest1 request) {
+            return base.Channel.generateEventsPDF(request);
+        }
+        
+        public RSI_Client.EventsService.generateEventsPDFResponse generateEventsPDF(RSI_Client.EventsService.generateEventsPDFRequest generateEventsPDFRequest) {
+            RSI_Client.EventsService.generateEventsPDFRequest1 inValue = new RSI_Client.EventsService.generateEventsPDFRequest1();
+            inValue.generateEventsPDFRequest = generateEventsPDFRequest;
+            RSI_Client.EventsService.generateEventsPDFResponse1 retVal = ((RSI_Client.EventsService.EventsPort)(this)).generateEventsPDF(inValue);
+            return retVal.generateEventsPDFResponse;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        RSI_Client.EventsService.getEventsByDateResponse RSI_Client.EventsService.EventsPort.getEventsByDate(RSI_Client.EventsService.getEventsByDateRequest1 request) {
+            return base.Channel.getEventsByDate(request);
+        }
+        
+        public RSI_Client.EventsService.@event[] getEventsByDate(RSI_Client.EventsService.getEventsByDateRequest getEventsByDateRequest) {
+            RSI_Client.EventsService.getEventsByDateRequest1 inValue = new RSI_Client.EventsService.getEventsByDateRequest1();
+            inValue.getEventsByDateRequest = getEventsByDateRequest;
+            RSI_Client.EventsService.getEventsByDateResponse retVal = ((RSI_Client.EventsService.EventsPort)(this)).getEventsByDate(inValue);
+            return retVal.getEventsByDateResponse1;
         }
     }
 }

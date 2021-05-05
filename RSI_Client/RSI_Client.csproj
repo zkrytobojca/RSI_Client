@@ -38,8 +38,10 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -67,6 +69,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="EventsCallback.cs" />
     <Compile Include="Icons\XAML\book-open.xaml.cs">
       <DependentUpon>book-open.xaml</DependentUpon>
     </Compile>
@@ -189,14 +192,20 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Resource Include="Icons\password.ttf" />
     <None Include="Connected Services\EventsService\events.wsdl" />
+    <None Include="Connected Services\EventsService\RSI_Client.EventsService.addEventResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\EventsService\RSI_Client.EventsService.event.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\EventsService\RSI_Client.EventsService.getAllEventsResponse.datasource">
+    <None Include="Connected Services\EventsService\RSI_Client.EventsService.generateEventsPDFResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\EventsService\RSI_Client.EventsService.getEventDetailsByIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <Resource Include="Icons\password.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
