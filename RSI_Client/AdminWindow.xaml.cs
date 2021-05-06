@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using RSI_Client.EventsService;
 using RSI_Client.Model;
 using RSI_Client.ViewModels;
 
@@ -227,7 +228,8 @@ namespace RSI_Client
             }
             else if(TabItemEvents.IsSelected)
             {
-                FilterBook();
+                //FilterEvent();
+                FilterEventViaService();
             }
             
         }
@@ -266,7 +268,7 @@ namespace RSI_Client
             }
 
         }
-        private void FilterBook()
+        private void FilterEvent()
         {
             switch (ComboBoxSearchType.SelectedIndex)
             {
@@ -295,6 +297,73 @@ namespace RSI_Client
                         CollectionViewSource.GetDefaultView(ListBoxAvailableEvents.ItemsSource).Filter = null;
                         break;
                     }
+            }
+        }
+
+        private void FilterEventViaService()
+        {
+            var client = new EventsPortClient("EventsPortSoap11");
+
+            switch (ComboBoxSearchType.SelectedIndex)
+            {
+                case 0:
+                    {
+                        getAllEventsRequest request = new getAllEventsRequest();
+                        @event[] events = client.getAllEvents(request);
+                        AdminWindowVM.Events.Clear();
+                        foreach (@event ev in events)
+                        {
+                            AdminWindowVM.Events.Add(new Event(ev));
+                        }
+                        break;
+                    }
+                case 1:
+                    {
+                        CollectionViewSource.GetDefaultView(ListBoxAvailableEvents.ItemsSource).Filter = FilterNameEvent;
+                        break;
+                    }
+                case 2:
+                    {
+                        DateTime searchedDate;
+                        if (!DateTime.TryParseExact(TextBoxAdminSearch.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchedDate))
+                        {
+                            break;
+                        }
+                        getEventsByDateRequest request = new getEventsByDateRequest();
+                        request.date = searchedDate;
+                        @event[] events = client.getEventsByDate(request);
+
+                        AdminWindowVM.Events.Clear();
+                        foreach (@event ev in events)
+                        {
+                            AdminWindowVM.Events.Add(new Event(ev));
+                        }
+                        break;
+                    }
+                case 3:
+                    {
+                        int week;
+                        if (!Int32.TryParse(TextBoxAdminSearch.Text, out week))
+                        {
+                            break;
+                        }
+                        getEventsByWeekRequest request = new getEventsByWeekRequest();
+                        request.week = week;
+                        @event[] events = client.getEventsByWeek(request);
+
+                        AdminWindowVM.Events.Clear();
+                        foreach (@event ev in events)
+                        {
+                            AdminWindowVM.Events.Add(new Event(ev));
+                        }
+                        break;
+                    }
+                default:
+                    {
+                        CollectionViewSource.GetDefaultView(ListBoxAvailableEvents.ItemsSource).Filter = null;
+                        break;
+                    }
+
             }
         }
         #endregion FilterMethods

@@ -151,7 +151,7 @@ namespace RSI_Client
         {
             Event ev = (Event)item;
             DateTime searchedDate;
-            if (!DateTime.TryParseExact(UserSearchTextBox.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchedDate))
+            if (!DateTime.TryParseExact(UserSearchTextBox.Text, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchedDate))
             {
                 return false;
             }
@@ -179,7 +179,8 @@ namespace RSI_Client
 
         private void DoFilter()
         {
-            FilterAvailableEvents();
+            //FilterAvailableEvents();
+            FilterAvailableEventsViaService();
         }
 
         private void SearchEnterPressed(object sender, KeyEventArgs e)
@@ -212,6 +213,73 @@ namespace RSI_Client
                 case 3:
                     {
                         CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = FilterWeek;
+                        break;
+                    }
+                default:
+                    {
+                        CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = null;
+                        break;
+                    }
+
+            }
+        }
+
+        private void FilterAvailableEventsViaService()
+        {
+            var client = new EventsPortClient("EventsPortSoap11");
+
+            switch (ComboBoxSearchType.SelectedIndex)
+            {
+                case 0:
+                    {
+                        getAllEventsRequest request = new getAllEventsRequest();
+                        @event[] events = client.getAllEvents(request);
+                        MainWindowVM.Events.Clear();
+                        foreach (@event ev in events)
+                        {
+                            MainWindowVM.Events.Add(new Event(ev));
+                        }
+                        break;
+                    }
+                case 1:
+                    {
+                        CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = FilterNameEvent;
+                        break;
+                    }
+                case 2:
+                    {
+                        DateTime searchedDate;
+                        if (!DateTime.TryParseExact(UserSearchTextBox.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchedDate))
+                        {
+                            break;
+                        }
+                        getEventsByDateRequest request = new getEventsByDateRequest();
+                        request.date = searchedDate;
+                        @event[] events = client.getEventsByDate(request);
+
+                        MainWindowVM.Events.Clear();
+                        foreach (@event ev in events)
+                        {
+                            MainWindowVM.Events.Add(new Event(ev));
+                        }
+                        break;
+                    }
+                case 3:
+                    {
+                        int week;
+                        if (!Int32.TryParse(UserSearchTextBox.Text, out week))
+                        {
+                            break;
+                        }
+                        getEventsByWeekRequest request = new getEventsByWeekRequest();
+                        request.week = week;
+                        @event[] events = client.getEventsByWeek(request);
+
+                        MainWindowVM.Events.Clear();
+                        foreach (@event ev in events)
+                        {
+                            MainWindowVM.Events.Add(new Event(ev));
+                        }
                         break;
                     }
                 default:
