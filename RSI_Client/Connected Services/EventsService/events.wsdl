@@ -54,6 +54,22 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="loginRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="username" type="xs:string" />
+            <xs:element name="password" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="registerRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="username" type="xs:string" />
+            <xs:element name="password" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="getAllEventsResponse">
         <xs:complexType>
           <xs:sequence>
@@ -110,6 +126,20 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="loginResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="user" type="tns:user" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="registerResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="status" type="tns:opStatusCode" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:complexType name="event">
         <xs:sequence>
           <xs:element name="id" type="xs:int" />
@@ -134,10 +164,24 @@
           <xs:enumeration value="FAULT" />
         </xs:restriction>
       </xs:simpleType>
+      <xs:complexType name="user">
+        <xs:sequence>
+          <xs:element name="id" type="xs:int" />
+          <xs:element name="username" type="xs:string" />
+          <xs:element name="password" type="xs:string" />
+          <xs:element name="admin" type="xs:boolean" />
+        </xs:sequence>
+      </xs:complexType>
     </xs:schema>
   </wsdl:types>
+  <wsdl:message name="registerRequest">
+    <wsdl:part name="registerRequest" element="tns:registerRequest" />
+  </wsdl:message>
   <wsdl:message name="addEventResponse">
     <wsdl:part name="addEventResponse" element="tns:addEventResponse" />
+  </wsdl:message>
+  <wsdl:message name="registerResponse">
+    <wsdl:part name="registerResponse" element="tns:registerResponse" />
   </wsdl:message>
   <wsdl:message name="deleteEventResponse">
     <wsdl:part name="deleteEventResponse" element="tns:deleteEventResponse" />
@@ -163,8 +207,14 @@
   <wsdl:message name="getEventDetailsByIdResponse">
     <wsdl:part name="getEventDetailsByIdResponse" element="tns:getEventDetailsByIdResponse" />
   </wsdl:message>
+  <wsdl:message name="loginRequest">
+    <wsdl:part name="loginRequest" element="tns:loginRequest" />
+  </wsdl:message>
   <wsdl:message name="generateEventsPDFResponse">
     <wsdl:part name="generateEventsPDFResponse" element="tns:generateEventsPDFResponse" />
+  </wsdl:message>
+  <wsdl:message name="loginResponse">
+    <wsdl:part name="loginResponse" element="tns:loginResponse" />
   </wsdl:message>
   <wsdl:message name="getEventsByDateRequest">
     <wsdl:part name="getEventsByDateRequest" element="tns:getEventsByDateRequest" />
@@ -185,6 +235,10 @@
     <wsdl:part name="modifyEventRequest" element="tns:modifyEventRequest" />
   </wsdl:message>
   <wsdl:portType name="EventsPort">
+    <wsdl:operation name="register">
+      <wsdl:input name="registerRequest" message="tns:registerRequest" />
+      <wsdl:output name="registerResponse" message="tns:registerResponse" />
+    </wsdl:operation>
     <wsdl:operation name="addEvent">
       <wsdl:input name="addEventRequest" message="tns:addEventRequest" />
       <wsdl:output name="addEventResponse" message="tns:addEventResponse" />
@@ -213,6 +267,10 @@
       <wsdl:input name="getEventsByWeekRequest" message="tns:getEventsByWeekRequest" />
       <wsdl:output name="getEventsByWeekResponse" message="tns:getEventsByWeekResponse" />
     </wsdl:operation>
+    <wsdl:operation name="login">
+      <wsdl:input name="loginRequest" message="tns:loginRequest" />
+      <wsdl:output name="loginResponse" message="tns:loginResponse" />
+    </wsdl:operation>
     <wsdl:operation name="modifyEvent">
       <wsdl:input name="modifyEventRequest" message="tns:modifyEventRequest" />
       <wsdl:output name="modifyEventResponse" message="tns:modifyEventResponse" />
@@ -220,6 +278,15 @@
   </wsdl:portType>
   <wsdl:binding name="EventsPortSoap11" type="tns:EventsPort">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="register">
+      <soap:operation soapAction="" />
+      <wsdl:input name="registerRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="registerResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="addEvent">
       <soap:operation soapAction="" />
       <wsdl:input name="addEventRequest">
@@ -280,6 +347,15 @@
         <soap:body use="literal" />
       </wsdl:input>
       <wsdl:output name="getEventsByWeekResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="login">
+      <soap:operation soapAction="" />
+      <wsdl:input name="loginRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="loginResponse">
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

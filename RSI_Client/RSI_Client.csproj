@@ -209,7 +209,13 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <Resource Include="Icons\password.ttf" />
+    <None Include="Connected Services\EventsService\RSI_Client.EventsService.loginResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\EventsService\RSI_Client.EventsService.modifyEventResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\EventsService\RSI_Client.EventsService.registerResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="packages.config" />

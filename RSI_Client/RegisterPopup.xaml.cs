@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using RSI_Client.EventsService;
 using RSI_Client.Model;
 
 namespace RSI_Client
@@ -98,22 +99,37 @@ namespace RSI_Client
                 ClearPassword();
             }
             else
-            if (Users.FirstOrDefault(u => string.Compare(u.Username, TextBoxRegisterLogin.Text) == 0) != null)
             {
-                MessageBox.Show("User with that username already exists", "Username taken", MessageBoxButton.OK, MessageBoxImage.Error);
-                ClearPassword();
-            }
-            else
-            {
-                RegisteredUser = new User
+                try
                 {
-                    Username = TextBoxRegisterLogin.Text,
-                    IsAdmin = false,
-                    Password = TextBoxRegisterPassword.Text
-                };
-                DialogResult = true;
-                MessageBox.Show("Account successfully created", "Registration success", MessageBoxButton.OK, MessageBoxImage.Information);
-                Close();
+                    var client = new EventsPortClient("EventsPortSoap11");
+                    registerRequest request = new registerRequest();
+                    request.username = TextBoxRegisterLogin.Text;
+                    request.password = TextBoxRegisterPassword.Text;
+                    registerResponse response = client.register(request);
+
+                    if(response.status == opStatusCode.FAULT)
+                    {
+                        MessageBox.Show("User with that username already exists", "Username taken", MessageBoxButton.OK, MessageBoxImage.Error);
+                        ClearPassword();
+                    }
+                    else if(response.status == opStatusCode.OK)
+                    {
+                        RegisteredUser = new User
+                        {
+                            Username = TextBoxRegisterLogin.Text,
+                            IsAdmin = false,
+                            Password = TextBoxRegisterPassword.Text
+                        };
+                        DialogResult = true;
+                        MessageBox.Show("Account successfully created", "Registration success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        Close();
+                    }
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(e.Message);
+                }
             }
         }
         private void RegisterEnterPressed(object sender, KeyEventArgs e)

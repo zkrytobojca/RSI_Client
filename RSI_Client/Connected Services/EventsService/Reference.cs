@@ -15,6 +15,11 @@ namespace RSI_Client.EventsService {
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://ws.event.bialystok.com", ConfigurationName="EventsService.EventsPort")]
     public interface EventsPort {
         
+        // CODEGEN: Generating message contract since the operation register is neither RPC nor document wrapped.
+        [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        RSI_Client.EventsService.registerResponse1 register(RSI_Client.EventsService.registerRequest1 request);
+        
         // CODEGEN: Generating message contract since the operation addEvent is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -50,6 +55,11 @@ namespace RSI_Client.EventsService {
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         RSI_Client.EventsService.getEventsByWeekResponse getEventsByWeek(RSI_Client.EventsService.getEventsByWeekRequest1 request);
         
+        // CODEGEN: Generating message contract since the operation login is neither RPC nor document wrapped.
+        [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        RSI_Client.EventsService.loginResponse1 login(RSI_Client.EventsService.loginRequest1 request);
+        
         // CODEGEN: Generating message contract since the operation modifyEvent is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -62,19 +72,107 @@ namespace RSI_Client.EventsService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
-    public partial class addEventRequest : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class registerRequest : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private @event eventField;
+        private string usernameField;
+        
+        private string passwordField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public @event @event {
+        public string username {
             get {
-                return this.eventField;
+                return this.usernameField;
             }
             set {
-                this.eventField = value;
-                this.RaisePropertyChanged("event");
+                this.usernameField = value;
+                this.RaisePropertyChanged("username");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        public string password {
+            get {
+                return this.passwordField;
+            }
+            set {
+                this.passwordField = value;
+                this.RaisePropertyChanged("password");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ws.event.bialystok.com")]
+    public partial class user : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private int idField;
+        
+        private string usernameField;
+        
+        private string passwordField;
+        
+        private bool adminField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public int id {
+            get {
+                return this.idField;
+            }
+            set {
+                this.idField = value;
+                this.RaisePropertyChanged("id");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        public string username {
+            get {
+                return this.usernameField;
+            }
+            set {
+                this.usernameField = value;
+                this.RaisePropertyChanged("username");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        public string password {
+            get {
+                return this.passwordField;
+            }
+            set {
+                this.passwordField = value;
+                this.RaisePropertyChanged("password");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
+        public bool admin {
+            get {
+                return this.adminField;
+            }
+            set {
+                this.adminField = value;
+                this.RaisePropertyChanged("admin");
             }
         }
         
@@ -237,6 +335,117 @@ namespace RSI_Client.EventsService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
+    public partial class registerResponse : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private opStatusCode statusField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public opStatusCode status {
+            get {
+                return this.statusField;
+            }
+            set {
+                this.statusField = value;
+                this.RaisePropertyChanged("status");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ws.event.bialystok.com")]
+    public enum opStatusCode {
+        
+        /// <remarks/>
+        OK,
+        
+        /// <remarks/>
+        FAULT,
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class registerRequest1 {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.event.bialystok.com", Order=0)]
+        public RSI_Client.EventsService.registerRequest registerRequest;
+        
+        public registerRequest1() {
+        }
+        
+        public registerRequest1(RSI_Client.EventsService.registerRequest registerRequest) {
+            this.registerRequest = registerRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class registerResponse1 {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.event.bialystok.com", Order=0)]
+        public RSI_Client.EventsService.registerResponse registerResponse;
+        
+        public registerResponse1() {
+        }
+        
+        public registerResponse1(RSI_Client.EventsService.registerResponse registerResponse) {
+            this.registerResponse = registerResponse;
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
+    public partial class addEventRequest : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private @event eventField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public @event @event {
+            get {
+                return this.eventField;
+            }
+            set {
+                this.eventField = value;
+                this.RaisePropertyChanged("event");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
     public partial class addEventResponse : object, System.ComponentModel.INotifyPropertyChanged {
         
         private @event eventDetailsField;
@@ -359,19 +568,6 @@ namespace RSI_Client.EventsService {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ws.event.bialystok.com")]
-    public enum opStatusCode {
-        
-        /// <remarks/>
-        OK,
-        
-        /// <remarks/>
-        FAULT,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -783,6 +979,118 @@ namespace RSI_Client.EventsService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
+    public partial class loginRequest : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private string usernameField;
+        
+        private string passwordField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public string username {
+            get {
+                return this.usernameField;
+            }
+            set {
+                this.usernameField = value;
+                this.RaisePropertyChanged("username");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        public string password {
+            get {
+                return this.passwordField;
+            }
+            set {
+                this.passwordField = value;
+                this.RaisePropertyChanged("password");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
+    public partial class loginResponse : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private user userField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public user user {
+            get {
+                return this.userField;
+            }
+            set {
+                this.userField = value;
+                this.RaisePropertyChanged("user");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class loginRequest1 {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.event.bialystok.com", Order=0)]
+        public RSI_Client.EventsService.loginRequest loginRequest;
+        
+        public loginRequest1() {
+        }
+        
+        public loginRequest1(RSI_Client.EventsService.loginRequest loginRequest) {
+            this.loginRequest = loginRequest;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class loginResponse1 {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.event.bialystok.com", Order=0)]
+        public RSI_Client.EventsService.loginResponse loginResponse;
+        
+        public loginResponse1() {
+        }
+        
+        public loginResponse1(RSI_Client.EventsService.loginResponse loginResponse) {
+            this.loginResponse = loginResponse;
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ws.event.bialystok.com")]
     public partial class modifyEventRequest : object, System.ComponentModel.INotifyPropertyChanged {
         
         private @event eventField;
@@ -903,6 +1211,18 @@ namespace RSI_Client.EventsService {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        RSI_Client.EventsService.registerResponse1 RSI_Client.EventsService.EventsPort.register(RSI_Client.EventsService.registerRequest1 request) {
+            return base.Channel.register(request);
+        }
+        
+        public RSI_Client.EventsService.registerResponse register(RSI_Client.EventsService.registerRequest registerRequest) {
+            RSI_Client.EventsService.registerRequest1 inValue = new RSI_Client.EventsService.registerRequest1();
+            inValue.registerRequest = registerRequest;
+            RSI_Client.EventsService.registerResponse1 retVal = ((RSI_Client.EventsService.EventsPort)(this)).register(inValue);
+            return retVal.registerResponse;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         RSI_Client.EventsService.addEventResponse1 RSI_Client.EventsService.EventsPort.addEvent(RSI_Client.EventsService.addEventRequest1 request) {
             return base.Channel.addEvent(request);
         }
@@ -984,6 +1304,18 @@ namespace RSI_Client.EventsService {
             inValue.getEventsByWeekRequest = getEventsByWeekRequest;
             RSI_Client.EventsService.getEventsByWeekResponse retVal = ((RSI_Client.EventsService.EventsPort)(this)).getEventsByWeek(inValue);
             return retVal.getEventsByWeekResponse1;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        RSI_Client.EventsService.loginResponse1 RSI_Client.EventsService.EventsPort.login(RSI_Client.EventsService.loginRequest1 request) {
+            return base.Channel.login(request);
+        }
+        
+        public RSI_Client.EventsService.loginResponse login(RSI_Client.EventsService.loginRequest loginRequest) {
+            RSI_Client.EventsService.loginRequest1 inValue = new RSI_Client.EventsService.loginRequest1();
+            inValue.loginRequest = loginRequest;
+            RSI_Client.EventsService.loginResponse1 retVal = ((RSI_Client.EventsService.EventsPort)(this)).login(inValue);
+            return retVal.loginResponse;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]

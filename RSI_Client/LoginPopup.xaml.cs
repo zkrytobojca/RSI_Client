@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using RSI_Client.EventsService;
 using RSI_Client.Model;
 
 namespace RSI_Client
@@ -61,16 +62,29 @@ namespace RSI_Client
         #endregion LoginCommand
         private void TryLogin()
         {
-            LoggedUser = Users.FirstOrDefault(u => string.Compare(u.Username, TextBoxLogin.Text) == 0 && string.Compare(u.Password, TextBoxPassword.Password) == 0);
-            if (LoggedUser != null)
+            try
             {
-                DialogResult = true;
-                Close();
+                var client = new EventsPortClient("EventsPortSoap11");
+                loginRequest request = new loginRequest();
+                request.username = TextBoxLogin.Text;
+                request.password = TextBoxPassword.Password;
+                loginResponse response = client.login(request);
+                
+                if(response.user == null)
+                {
+                    MessageBox.Show("Incorrect username or password", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    TextBoxPassword.Password = "";
+                }
+                else
+                {
+                    LoggedUser = new User(response.user.username, response.user.password, response.user.admin);
+                    DialogResult = true;
+                    Close();
+                }
             }
-            else
+            catch (Exception e)
             {
-                MessageBox.Show("Incorrect username or password", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                TextBoxPassword.Password = "";
+                System.Console.WriteLine(e.Message);
             }
         }
         private void LoginEnterPressed(object sender, KeyEventArgs e)
