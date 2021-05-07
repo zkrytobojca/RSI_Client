@@ -38,7 +38,7 @@ namespace RSI_Client
             CommandBinding commandRemoveEventBinding = new CommandBinding(
             CommandDeleteEvent, ExecutedDeleteEvent, CanExecuteDeleteEvent);
             CommandBindings.Add(commandRemoveEventBinding);
-            ButtonDeleteBook.Command = CommandDeleteEvent;
+            ButtonDeleteEvent.Command = CommandDeleteEvent;
             CommandBinding commandDeleteUserBinding = new CommandBinding(
             CommandDeleteUser, ExecutedDeleteUser, CanExecuteDeleteUser);
             CommandBindings.Add(commandDeleteUserBinding);
@@ -47,7 +47,81 @@ namespace RSI_Client
         #region EventButtons
         private void AddEventButtonClick(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                var client = new EventsPortClient("EventsPortSoap11");
+                addEventRequest request = new addEventRequest();
+                request.@event = new @event();
+                request.@event.name = TextBoxName.Text;
+                type type = 0;
+                Enum.TryParse<type>(TextBoxType.Text, out type);
+                request.@event.type = type;
+                request.@event.date = DatePickerReleaseDate.SelectedDate.Value;
+                int week = 0;
+                Int32.TryParse(TextBoxWeek.Text, out week);
+                request.@event.week = week;
+                int month = 0;
+                Int32.TryParse(TextBoxMonth.Text, out month);
+                request.@event.month = month;
+                int year = 0;
+                Int32.TryParse(TextBoxYear.Text, out year);
+                request.@event.year = year;
+                request.@event.description = TextBoxDescription.Text;
+                addEventResponse response = client.addEvent(request);
 
+                getAllEventsRequest request2 = new getAllEventsRequest();
+                @event[] events = client.getAllEvents(request2);
+
+                AdminWindowVM.Events.Clear();
+                foreach (@event ev in events)
+                {
+                    AdminWindowVM.Events.Add(new Event(ev));
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void ModifyEventButtonClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var client = new EventsPortClient("EventsPortSoap11");
+                modifyEventRequest request = new modifyEventRequest();
+                request.@event = new @event();
+                request.@event.id = SelectedEvent.Id;
+                request.@event.name = TextBoxName.Text;
+                type type = SelectedEvent.Type;
+                Enum.TryParse<type>(TextBoxType.Text, out type);
+                request.@event.type = type;
+                request.@event.date = DatePickerReleaseDate.SelectedDate.Value;
+                int week = 0;
+                Int32.TryParse(TextBoxWeek.Text, out week);
+                request.@event.week = week;
+                int month = 0;
+                Int32.TryParse(TextBoxMonth.Text, out month);
+                request.@event.month = month;
+                int year = 0;
+                Int32.TryParse(TextBoxYear.Text, out year);
+                request.@event.year = year;
+                request.@event.description = TextBoxDescription.Text;
+                modifyEventResponse response = client.modifyEvent(request);
+
+                getAllEventsRequest request2 = new getAllEventsRequest();
+                @event[] events = client.getAllEvents(request2);
+
+                AdminWindowVM.Events.Clear();
+                foreach (@event ev in events)
+                {
+                    AdminWindowVM.Events.Add(new Event(ev));
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
         }
         #endregion EventButtons
 
@@ -65,7 +139,28 @@ namespace RSI_Client
         {
             int tempIndex = ListBoxAvailableEvents.SelectedIndex;
             Event removed = AdminWindowVM.Events[tempIndex];
-            AdminWindowVM.Events.Remove(removed);
+
+            try
+            {
+                var client = new EventsPortClient("EventsPortSoap11");
+                deleteEventRequest request = new deleteEventRequest();
+                request.eventId = removed.Id;
+                deleteEventResponse response = client.deleteEvent(request);
+
+                getAllEventsRequest request2 = new getAllEventsRequest();
+                @event[] events = client.getAllEvents(request2);
+
+                AdminWindowVM.Events.Clear();
+                foreach (@event ev in events)
+                {
+                    AdminWindowVM.Events.Add(new Event(ev));
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
+
             if (AdminWindowVM.Events.Count > 0)
             {
                 ListBoxAvailableEvents.SelectedIndex = tempIndex - 1;
@@ -302,68 +397,75 @@ namespace RSI_Client
 
         private void FilterEventViaService()
         {
-            var client = new EventsPortClient("EventsPortSoap11");
-
-            switch (ComboBoxSearchType.SelectedIndex)
+            try
             {
-                case 0:
-                    {
-                        getAllEventsRequest request = new getAllEventsRequest();
-                        @event[] events = client.getAllEvents(request);
-                        AdminWindowVM.Events.Clear();
-                        foreach (@event ev in events)
+                var client = new EventsPortClient("EventsPortSoap11");
+
+                switch (ComboBoxSearchType.SelectedIndex)
+                {
+                    case 0:
                         {
-                            AdminWindowVM.Events.Add(new Event(ev));
-                        }
-                        break;
-                    }
-                case 1:
-                    {
-                        CollectionViewSource.GetDefaultView(ListBoxAvailableEvents.ItemsSource).Filter = FilterNameEvent;
-                        break;
-                    }
-                case 2:
-                    {
-                        DateTime searchedDate;
-                        if (!DateTime.TryParseExact(TextBoxAdminSearch.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchedDate))
-                        {
+                            getAllEventsRequest request = new getAllEventsRequest();
+                            @event[] events = client.getAllEvents(request);
+                            AdminWindowVM.Events.Clear();
+                            foreach (@event ev in events)
+                            {
+                                AdminWindowVM.Events.Add(new Event(ev));
+                            }
                             break;
                         }
-                        getEventsByDateRequest request = new getEventsByDateRequest();
-                        request.date = searchedDate;
-                        @event[] events = client.getEventsByDate(request);
-
-                        AdminWindowVM.Events.Clear();
-                        foreach (@event ev in events)
+                    case 1:
                         {
-                            AdminWindowVM.Events.Add(new Event(ev));
-                        }
-                        break;
-                    }
-                case 3:
-                    {
-                        int week;
-                        if (!Int32.TryParse(TextBoxAdminSearch.Text, out week))
-                        {
+                            CollectionViewSource.GetDefaultView(ListBoxAvailableEvents.ItemsSource).Filter = FilterNameEvent;
                             break;
                         }
-                        getEventsByWeekRequest request = new getEventsByWeekRequest();
-                        request.week = week;
-                        @event[] events = client.getEventsByWeek(request);
-
-                        AdminWindowVM.Events.Clear();
-                        foreach (@event ev in events)
+                    case 2:
                         {
-                            AdminWindowVM.Events.Add(new Event(ev));
-                        }
-                        break;
-                    }
-                default:
-                    {
-                        CollectionViewSource.GetDefaultView(ListBoxAvailableEvents.ItemsSource).Filter = null;
-                        break;
-                    }
+                            DateTime searchedDate;
+                            if (!DateTime.TryParseExact(TextBoxAdminSearch.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchedDate))
+                            {
+                                break;
+                            }
+                            getEventsByDateRequest request = new getEventsByDateRequest();
+                            request.date = searchedDate;
+                            @event[] events = client.getEventsByDate(request);
 
+                            AdminWindowVM.Events.Clear();
+                            foreach (@event ev in events)
+                            {
+                                AdminWindowVM.Events.Add(new Event(ev));
+                            }
+                            break;
+                        }
+                    case 3:
+                        {
+                            int week;
+                            if (!Int32.TryParse(TextBoxAdminSearch.Text, out week))
+                            {
+                                break;
+                            }
+                            getEventsByWeekRequest request = new getEventsByWeekRequest();
+                            request.week = week;
+                            @event[] events = client.getEventsByWeek(request);
+
+                            AdminWindowVM.Events.Clear();
+                            foreach (@event ev in events)
+                            {
+                                AdminWindowVM.Events.Add(new Event(ev));
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            CollectionViewSource.GetDefaultView(ListBoxAvailableEvents.ItemsSource).Filter = null;
+                            break;
+                        }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
             }
         }
         #endregion FilterMethods

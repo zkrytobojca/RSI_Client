@@ -135,9 +135,9 @@ namespace RSI_Client
 
         private void EventAvailableSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (ListOfAvailableEvents.SelectedIndex >= 0 && ListOfAvailableEvents.SelectedIndex < MainWindowVM.Users[0].SeenEvents.Count)
+            if (ListOfAvailableEvents.SelectedIndex >= 0 && ListOfAvailableEvents.SelectedIndex < MainWindowVM.Events.Count)
             {
-                SelectedEvent = MainWindowVM.Users[0].SeenEvents[ListOfAvailableEvents.SelectedIndex];
+                SelectedEvent = MainWindowVM.Events[ListOfAvailableEvents.SelectedIndex];
             }
         }
 
@@ -226,68 +226,75 @@ namespace RSI_Client
 
         private void FilterAvailableEventsViaService()
         {
-            var client = new EventsPortClient("EventsPortSoap11");
-
-            switch (ComboBoxSearchType.SelectedIndex)
+            try
             {
-                case 0:
-                    {
-                        getAllEventsRequest request = new getAllEventsRequest();
-                        @event[] events = client.getAllEvents(request);
-                        MainWindowVM.Events.Clear();
-                        foreach (@event ev in events)
+                var client = new EventsPortClient("EventsPortSoap11");
+
+                switch (ComboBoxSearchType.SelectedIndex)
+                {
+                    case 0:
                         {
-                            MainWindowVM.Events.Add(new Event(ev));
-                        }
-                        break;
-                    }
-                case 1:
-                    {
-                        CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = FilterNameEvent;
-                        break;
-                    }
-                case 2:
-                    {
-                        DateTime searchedDate;
-                        if (!DateTime.TryParseExact(UserSearchTextBox.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchedDate))
-                        {
+                            getAllEventsRequest request = new getAllEventsRequest();
+                            @event[] events = client.getAllEvents(request);
+                            MainWindowVM.Events.Clear();
+                            foreach (@event ev in events)
+                            {
+                                MainWindowVM.Events.Add(new Event(ev));
+                            }
                             break;
                         }
-                        getEventsByDateRequest request = new getEventsByDateRequest();
-                        request.date = searchedDate;
-                        @event[] events = client.getEventsByDate(request);
-
-                        MainWindowVM.Events.Clear();
-                        foreach (@event ev in events)
+                    case 1:
                         {
-                            MainWindowVM.Events.Add(new Event(ev));
-                        }
-                        break;
-                    }
-                case 3:
-                    {
-                        int week;
-                        if (!Int32.TryParse(UserSearchTextBox.Text, out week))
-                        {
+                            CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = FilterNameEvent;
                             break;
                         }
-                        getEventsByWeekRequest request = new getEventsByWeekRequest();
-                        request.week = week;
-                        @event[] events = client.getEventsByWeek(request);
-
-                        MainWindowVM.Events.Clear();
-                        foreach (@event ev in events)
+                    case 2:
                         {
-                            MainWindowVM.Events.Add(new Event(ev));
-                        }
-                        break;
-                    }
-                default:
-                    {
-                        CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = null;
-                        break;
-                    }
+                            DateTime searchedDate;
+                            if (!DateTime.TryParseExact(UserSearchTextBox.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchedDate))
+                            {
+                                break;
+                            }
+                            getEventsByDateRequest request = new getEventsByDateRequest();
+                            request.date = searchedDate;
+                            @event[] events = client.getEventsByDate(request);
 
+                            MainWindowVM.Events.Clear();
+                            foreach (@event ev in events)
+                            {
+                                MainWindowVM.Events.Add(new Event(ev));
+                            }
+                            break;
+                        }
+                    case 3:
+                        {
+                            int week;
+                            if (!Int32.TryParse(UserSearchTextBox.Text, out week))
+                            {
+                                break;
+                            }
+                            getEventsByWeekRequest request = new getEventsByWeekRequest();
+                            request.week = week;
+                            @event[] events = client.getEventsByWeek(request);
+
+                            MainWindowVM.Events.Clear();
+                            foreach (@event ev in events)
+                            {
+                                MainWindowVM.Events.Add(new Event(ev));
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = null;
+                            break;
+                        }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
             }
         }
 
@@ -309,6 +316,45 @@ namespace RSI_Client
         private void FilterReset()
         {
             CollectionViewSource.GetDefaultView(ListOfAvailableEvents.ItemsSource).Filter = null;
+        }
+
+        private void RefreshButtonClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var client = new EventsPortClient("EventsPortSoap11");
+                getEventDetailsByIdRequest request = new getEventDetailsByIdRequest();
+                request.id = SelectedEvent.Id;
+                getEventDetailsByIdResponse response = client.getEventDetailsById(request);
+                SelectedEvent.Name = response.eventDetails.name;
+                SelectedEvent.Type = response.eventDetails.type;
+                SelectedEvent.Date = response.eventDetails.date;
+                SelectedEvent.Year = response.eventDetails.year;
+                SelectedEvent.Month = response.eventDetails.month;
+                SelectedEvent.Week = response.eventDetails.week;
+                SelectedEvent.Description = response.eventDetails.description;
+                MessageBox.Show("Event updated", "Event info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void PdfButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var client = new EventsPortClient("EventsPortSoap11");
+                generateEventsPDFRequest request = new generateEventsPDFRequest();
+                generateEventsPDFResponse response = client.generateEventsPDF(request);
+                File.WriteAllBytes("ListOfEvents.pdf", response.content);
+                MessageBox.Show("PDF generated", "PDF info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
         }
     }
 }

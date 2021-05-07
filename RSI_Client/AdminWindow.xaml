@@ -50,7 +50,7 @@
 
                 </Style>
             </TabControl.Resources>
-            <TabItem  HorizontalAlignment="Stretch" Header="Users" Name="TabItemUsers">
+            <TabItem  HorizontalAlignment="Stretch" Header="Users" Name="TabItemUsers" Visibility="Hidden">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
@@ -132,7 +132,7 @@
                 </Grid>
 
             </TabItem>
-            <TabItem HorizontalAlignment="Stretch" Header="Events" Name="TabItemEvents">
+            <TabItem HorizontalAlignment="Stretch" Header="Events" Name="TabItemEvents" IsSelected="True">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
@@ -155,17 +155,24 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0" Margin="5,5,5,5" Click="AddEventButtonClick">
                             <StackPanel Orientation="Horizontal">
-                                <icons:plus Margin="5" Width="24" Height="24"></icons:plus>
-                                <TextBlock TextAlignment="Center" VerticalAlignment="Center"><Run Text="Add "/><Run Text="event"/></TextBlock>
+                                <icons:plus Margin="3" Width="24" Height="24"></icons:plus>
+                                <TextBlock TextAlignment="Center" VerticalAlignment="Center"><Run Text="Add "/></TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button Grid.Column="1" Margin="5,5,5,5" Name="ButtonDeleteBook" Command="{Binding}">
+                        <Button Grid.Column="1" Margin="5,5,5,5" Click="ModifyEventButtonClick">
                             <StackPanel Orientation="Horizontal">
-                                <icons:cross Width="24" Height="24" Margin="5"></icons:cross>
-                                <TextBlock TextAlignment="Center" VerticalAlignment="Center"><Run Text="Delete "/><Run Text="event"/></TextBlock>
+                                <icons:plus Margin="3" Width="24" Height="24"></icons:plus>
+                                <TextBlock TextAlignment="Center" VerticalAlignment="Center"><Run Text="Modify "/></TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="2" Margin="5,5,5,5" Name="ButtonDeleteEvent" Command="{Binding}">
+                            <StackPanel Orientation="Horizontal">
+                                <icons:cross Width="24" Height="24" Margin="3"></icons:cross>
+                                <TextBlock TextAlignment="Center" VerticalAlignment="Center"><Run Text="Delete "/></TextBlock>
                             </StackPanel>
                         </Button>
                     </Grid>
@@ -191,30 +198,30 @@
                                 <icons:book_open></icons:book_open>
                                 <Label  Grid.Row="0" HorizontalContentAlignment="Center" Margin="0,5" VerticalAlignment="Center" Content="Name"/>
                             </StackPanel>
-                            <TextBox   Grid.Row="1" Margin="5,5,5,5" Name="TextBoxTitle" IsEnabled="{Binding ElementName=ListBoxAvailableEvents,Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}" TextWrapping="Wrap" Grid.ColumnSpan="2" Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                            <TextBox   Grid.Row="1" Margin="5,5,5,5" Name="TextBoxName" TextWrapping="Wrap" Grid.ColumnSpan="2" Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                             <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <icons:bookmark></icons:bookmark>
                                 <Label  Grid.Row="0" HorizontalContentAlignment="Center" Margin="0,5" VerticalAlignment="Center" Content="Type"/>
                             </StackPanel>
-                            <TextBox   Grid.Row="3" Margin="5,5,5,5" Name="TextBoxType" IsEnabled="{Binding ElementName=ListBoxAvailableEvents,Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}" TextWrapping="Wrap" Grid.ColumnSpan="2" Text="{Binding Path=Type, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                            <TextBox   Grid.Row="3" Margin="5,5,5,5" Name="TextBoxType" TextWrapping="Wrap" Grid.ColumnSpan="2" Text="{Binding Path=Type, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                             <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <icons:clock></icons:clock>
                                 <Label  Grid.Row="0" HorizontalContentAlignment="Center" Margin="0,5" VerticalAlignment="Center" Content="Date"/>
                             </StackPanel>
-                            <DatePicker  Grid.Row="5"  Margin="5,5,5,5"  IsEnabled="{Binding ElementName=ListBoxAvailableEvents,Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}"  Name="DatePickerReleaseDate" Grid.ColumnSpan="2" SelectedDate="{Binding Path=Date, UpdateSourceTrigger=PropertyChanged}"></DatePicker>
+                            <DatePicker  Grid.Row="5"  Margin="5,5,5,5"  Name="DatePickerReleaseDate" Grid.ColumnSpan="2" SelectedDate="{Binding Path=Date, UpdateSourceTrigger=PropertyChanged}"></DatePicker>
                             <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label  Grid.Row="0" HorizontalContentAlignment="Center" Margin="0,5" VerticalAlignment="Center" Content="Week: "/>
-                                <TextBox   Grid.Row="1" Margin="5,5,5,5" Width="100" Name="TextBoxWeek" IsEnabled="{Binding ElementName=ListBoxAvailableEvents,Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}" TextWrapping="Wrap" Grid.ColumnSpan="2" Text="{Binding Path=Week, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                <TextBox   Grid.Row="1" Margin="5,5,5,5" Width="100" Name="TextBoxWeek" TextWrapping="Wrap" Grid.ColumnSpan="2" Text="{Binding Path=Week, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                 <Label  Grid.Row="0" HorizontalContentAlignment="Center" Margin="0,5" VerticalAlignment="Center" Content="Month: "/>
-                                <TextBox   Grid.Row="1" Margin="5,5,5,5" Width="100" Name="TextBoxMonth" IsEnabled="{Binding ElementName=ListBoxAvailableEvents,Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}" TextWrapping="Wrap" Grid.ColumnSpan="2" Text="{Binding Path=Month, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                <TextBox   Grid.Row="1" Margin="5,5,5,5" Width="100" Name="TextBoxMonth" TextWrapping="Wrap" Grid.ColumnSpan="2" Text="{Binding Path=Month, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                 <Label  Grid.Row="0" HorizontalContentAlignment="Center" Margin="0,5" VerticalAlignment="Center" Content="Year: "/>
-                                <TextBox   Grid.Row="1" Margin="5,5,5,5" Width="100" Name="TextBoxYear" IsEnabled="{Binding ElementName=ListBoxAvailableEvents,Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}" TextWrapping="Wrap" Grid.ColumnSpan="2" Text="{Binding Path=Year, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                <TextBox   Grid.Row="1" Margin="5,5,5,5" Width="100" Name="TextBoxYear" TextWrapping="Wrap" Grid.ColumnSpan="2" Text="{Binding Path=Year, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                             </StackPanel>
                             <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <icons:book></icons:book>
                                 <Label  Grid.Row="0" HorizontalContentAlignment="Center" Margin="0,5" VerticalAlignment="Center" Content="Description"/>
                             </StackPanel>
-                            <TextBox   Grid.Row="8" Margin="5,5,5,5" Name="TextBoxDescription" IsEnabled="{Binding ElementName=ListBoxAvailableEvents,Path=SelectedItem, Converter={StaticResource NullToBoolConverter}}" TextWrapping="Wrap" Grid.ColumnSpan="2" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                            <TextBox   Grid.Row="8" Margin="5,5,5,5" Name="TextBoxDescription" TextWrapping="Wrap" Grid.ColumnSpan="2" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         </Grid>
                     </GroupBox>
                 </Grid>

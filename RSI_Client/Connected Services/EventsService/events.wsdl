@@ -36,7 +36,21 @@
       <xs:element name="addEventRequest">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="eventDto" type="tns:eventDto" />
+            <xs:element name="event" type="tns:event" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="modifyEventRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="event" type="tns:event" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="deleteEventRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="eventId" type="xs:int" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -75,6 +89,20 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="modifyEventResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="eventDetails" type="tns:event" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="deleteEventResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="status" type="tns:opStatusCode" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="generateEventsPDFResponse">
         <xs:complexType>
           <xs:sequence>
@@ -94,33 +122,40 @@
           <xs:element name="description" type="xs:string" />
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="eventDto">
-        <xs:sequence>
-          <xs:element name="name" type="xs:string" />
-          <xs:element name="type" type="tns:type" />
-          <xs:element name="date" type="xs:date" />
-          <xs:element name="week" type="xs:int" />
-          <xs:element name="month" type="xs:int" />
-          <xs:element name="year" type="xs:int" />
-          <xs:element name="description" type="xs:string" />
-        </xs:sequence>
-      </xs:complexType>
       <xs:simpleType name="type">
         <xs:restriction base="xs:string">
           <xs:enumeration value="SPORT" />
           <xs:enumeration value="CULTURAL" />
         </xs:restriction>
       </xs:simpleType>
+      <xs:simpleType name="opStatusCode">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="OK" />
+          <xs:enumeration value="FAULT" />
+        </xs:restriction>
+      </xs:simpleType>
     </xs:schema>
   </wsdl:types>
+  <wsdl:message name="addEventResponse">
+    <wsdl:part name="addEventResponse" element="tns:addEventResponse" />
+  </wsdl:message>
+  <wsdl:message name="deleteEventResponse">
+    <wsdl:part name="deleteEventResponse" element="tns:deleteEventResponse" />
+  </wsdl:message>
+  <wsdl:message name="generateEventsPDFRequest">
+    <wsdl:part name="generateEventsPDFRequest" element="tns:generateEventsPDFRequest" />
+  </wsdl:message>
+  <wsdl:message name="getEventsByDateResponse">
+    <wsdl:part name="getEventsByDateResponse" element="tns:getEventsByDateResponse" />
+  </wsdl:message>
+  <wsdl:message name="getEventDetailsByIdRequest">
+    <wsdl:part name="getEventDetailsByIdRequest" element="tns:getEventDetailsByIdRequest" />
+  </wsdl:message>
   <wsdl:message name="getAllEventsRequest">
     <wsdl:part name="getAllEventsRequest" element="tns:getAllEventsRequest" />
   </wsdl:message>
   <wsdl:message name="addEventRequest">
     <wsdl:part name="addEventRequest" element="tns:addEventRequest" />
-  </wsdl:message>
-  <wsdl:message name="addEventResponse">
-    <wsdl:part name="addEventResponse" element="tns:addEventResponse" />
   </wsdl:message>
   <wsdl:message name="getEventsByWeekResponse">
     <wsdl:part name="getEventsByWeekResponse" element="tns:getEventsByWeekResponse" />
@@ -137,34 +172,26 @@
   <wsdl:message name="getAllEventsResponse">
     <wsdl:part name="getAllEventsResponse" element="tns:getAllEventsResponse" />
   </wsdl:message>
-  <wsdl:message name="generateEventsPDFRequest">
-    <wsdl:part name="generateEventsPDFRequest" element="tns:generateEventsPDFRequest" />
-  </wsdl:message>
-  <wsdl:message name="getEventsByDateResponse">
-    <wsdl:part name="getEventsByDateResponse" element="tns:getEventsByDateResponse" />
+  <wsdl:message name="modifyEventResponse">
+    <wsdl:part name="modifyEventResponse" element="tns:modifyEventResponse" />
   </wsdl:message>
   <wsdl:message name="getEventsByWeekRequest">
     <wsdl:part name="getEventsByWeekRequest" element="tns:getEventsByWeekRequest" />
   </wsdl:message>
-  <wsdl:message name="getEventDetailsByIdRequest">
-    <wsdl:part name="getEventDetailsByIdRequest" element="tns:getEventDetailsByIdRequest" />
+  <wsdl:message name="deleteEventRequest">
+    <wsdl:part name="deleteEventRequest" element="tns:deleteEventRequest" />
+  </wsdl:message>
+  <wsdl:message name="modifyEventRequest">
+    <wsdl:part name="modifyEventRequest" element="tns:modifyEventRequest" />
   </wsdl:message>
   <wsdl:portType name="EventsPort">
-    <wsdl:operation name="getAllEvents">
-      <wsdl:input name="getAllEventsRequest" message="tns:getAllEventsRequest" />
-      <wsdl:output name="getAllEventsResponse" message="tns:getAllEventsResponse" />
-    </wsdl:operation>
     <wsdl:operation name="addEvent">
       <wsdl:input name="addEventRequest" message="tns:addEventRequest" />
       <wsdl:output name="addEventResponse" message="tns:addEventResponse" />
     </wsdl:operation>
-    <wsdl:operation name="getEventsByWeek">
-      <wsdl:input name="getEventsByWeekRequest" message="tns:getEventsByWeekRequest" />
-      <wsdl:output name="getEventsByWeekResponse" message="tns:getEventsByWeekResponse" />
-    </wsdl:operation>
-    <wsdl:operation name="getEventDetailsById">
-      <wsdl:input name="getEventDetailsByIdRequest" message="tns:getEventDetailsByIdRequest" />
-      <wsdl:output name="getEventDetailsByIdResponse" message="tns:getEventDetailsByIdResponse" />
+    <wsdl:operation name="deleteEvent">
+      <wsdl:input name="deleteEventRequest" message="tns:deleteEventRequest" />
+      <wsdl:output name="deleteEventResponse" message="tns:deleteEventResponse" />
     </wsdl:operation>
     <wsdl:operation name="generateEventsPDF">
       <wsdl:input name="generateEventsPDFRequest" message="tns:generateEventsPDFRequest" />
@@ -174,18 +201,25 @@
       <wsdl:input name="getEventsByDateRequest" message="tns:getEventsByDateRequest" />
       <wsdl:output name="getEventsByDateResponse" message="tns:getEventsByDateResponse" />
     </wsdl:operation>
+    <wsdl:operation name="getEventDetailsById">
+      <wsdl:input name="getEventDetailsByIdRequest" message="tns:getEventDetailsByIdRequest" />
+      <wsdl:output name="getEventDetailsByIdResponse" message="tns:getEventDetailsByIdResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllEvents">
+      <wsdl:input name="getAllEventsRequest" message="tns:getAllEventsRequest" />
+      <wsdl:output name="getAllEventsResponse" message="tns:getAllEventsResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getEventsByWeek">
+      <wsdl:input name="getEventsByWeekRequest" message="tns:getEventsByWeekRequest" />
+      <wsdl:output name="getEventsByWeekResponse" message="tns:getEventsByWeekResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="modifyEvent">
+      <wsdl:input name="modifyEventRequest" message="tns:modifyEventRequest" />
+      <wsdl:output name="modifyEventResponse" message="tns:modifyEventResponse" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="EventsPortSoap11" type="tns:EventsPort">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="getAllEvents">
-      <soap:operation soapAction="" />
-      <wsdl:input name="getAllEventsRequest">
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output name="getAllEventsResponse">
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="addEvent">
       <soap:operation soapAction="" />
       <wsdl:input name="addEventRequest">
@@ -195,21 +229,12 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="getEventsByWeek">
+    <wsdl:operation name="deleteEvent">
       <soap:operation soapAction="" />
-      <wsdl:input name="getEventsByWeekRequest">
+      <wsdl:input name="deleteEventRequest">
         <soap:body use="literal" />
       </wsdl:input>
-      <wsdl:output name="getEventsByWeekResponse">
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="getEventDetailsById">
-      <soap:operation soapAction="" />
-      <wsdl:input name="getEventDetailsByIdRequest">
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output name="getEventDetailsByIdResponse">
+      <wsdl:output name="deleteEventResponse">
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
@@ -228,6 +253,42 @@
         <soap:body use="literal" />
       </wsdl:input>
       <wsdl:output name="getEventsByDateResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEventDetailsById">
+      <soap:operation soapAction="" />
+      <wsdl:input name="getEventDetailsByIdRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getEventDetailsByIdResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllEvents">
+      <soap:operation soapAction="" />
+      <wsdl:input name="getAllEventsRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getAllEventsResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEventsByWeek">
+      <soap:operation soapAction="" />
+      <wsdl:input name="getEventsByWeekRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getEventsByWeekResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="modifyEvent">
+      <soap:operation soapAction="" />
+      <wsdl:input name="modifyEventRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="modifyEventResponse">
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

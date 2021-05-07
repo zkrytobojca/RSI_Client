@@ -196,6 +196,9 @@
     <None Include="Connected Services\EventsService\RSI_Client.EventsService.addEventResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\EventsService\RSI_Client.EventsService.deleteEventResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\EventsService\RSI_Client.EventsService.event.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -206,6 +209,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <Resource Include="Icons\password.ttf" />
+    <None Include="Connected Services\EventsService\RSI_Client.EventsService.modifyEventResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

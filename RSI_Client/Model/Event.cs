@@ -27,8 +27,8 @@ namespace RSI_Client.Model
 
         }
 
-        private int type;
-        public int Type
+        private RSI_Client.EventsService.type type;
+        public RSI_Client.EventsService.type Type
         {
             get
             {
@@ -140,7 +140,7 @@ namespace RSI_Client.Model
         {
 
         }
-        public Event(int id, string name, int type, DateTime date, int week, int month, int year, string description)
+        public Event(int id, string name, RSI_Client.EventsService.type type, DateTime date, int week, int month, int year, string description)
         {
             Id = id;
             Name = name;
@@ -155,7 +155,7 @@ namespace RSI_Client.Model
         {
             Id = ev.id;
             Name = ev.name;
-            Type = (int)ev.type;
+            Type = ev.type;
             Date = ev.date;
             Week = ev.week;
             Month = ev.month;
