@@ -192,7 +192,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Connected Services\EventsService\events.wsdl" />
+    <None Include="Connected Services\EventsService\events11.wsdl" />
     <None Include="Connected Services\EventsService\RSI_Client.EventsService.addEventResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

@@ -18,10 +18,10 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:8443/ws/events.wsdl" Protocol="http" SourceId="1" />
+    <MetadataSource Address="https://localhost:8443/ws/events.wsdl" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="events.wsdl" MetadataType="Wsdl" ID="44996661-892a-4105-94ea-45ad83250d6b" SourceId="1" SourceUrl="http://localhost:8443/ws/events.wsdl" />
+    <MetadataFile FileName="events11.wsdl" MetadataType="Wsdl" ID="9aaddb25-a5b4-4f76-8ecd-a03694951233" SourceId="1" SourceUrl="https://localhost:8443/ws/events.wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

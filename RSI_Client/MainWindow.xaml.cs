@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,9 @@ namespace RSI_Client
 {
     public partial class MainWindow : Window
     {
+        static string KEYSTORE_PATH = "C:/Users/Piotrek/Desktop/Piotrek/Studia/8_Semestr/RSI/Projekt1/SOAP_ws/src/main/resources/myKeyStore.p12";
+        static string PASSWORD = "123456";
+
         public Event SelectedEvent { get; set; }
         public MainWindowVM MainWindowVM { get; set; }
         public MainWindow()
@@ -105,7 +109,12 @@ namespace RSI_Client
         {
             try
             {
+                X509Certificate2 cert = new X509Certificate2(KEYSTORE_PATH, PASSWORD);
                 var client = new EventsPortClient("EventsPortSoap11");
+                client.ClientCredentials.ClientCertificate.Certificate = cert;
+                ServicePointManager.ServerCertificateValidationCallback +=
+                     (mender, certificate, chain, sslPolicyErrors) => true;
+
                 getAllEventsRequest request = new getAllEventsRequest();
                 @event[] events = client.getAllEvents(request);
 
@@ -228,7 +237,11 @@ namespace RSI_Client
         {
             try
             {
+                X509Certificate2 cert = new X509Certificate2(KEYSTORE_PATH, PASSWORD);
                 var client = new EventsPortClient("EventsPortSoap11");
+                client.ClientCredentials.ClientCertificate.Certificate = cert;
+                ServicePointManager.ServerCertificateValidationCallback +=
+                     (mender, certificate, chain, sslPolicyErrors) => true;
 
                 switch (ComboBoxSearchType.SelectedIndex)
                 {
@@ -322,7 +335,11 @@ namespace RSI_Client
         {
             try
             {
+                X509Certificate2 cert = new X509Certificate2(KEYSTORE_PATH, PASSWORD);
                 var client = new EventsPortClient("EventsPortSoap11");
+                client.ClientCredentials.ClientCertificate.Certificate = cert;
+                ServicePointManager.ServerCertificateValidationCallback +=
+                     (mender, certificate, chain, sslPolicyErrors) => true;
                 getEventDetailsByIdRequest request = new getEventDetailsByIdRequest();
                 request.id = SelectedEvent.Id;
                 getEventDetailsByIdResponse response = client.getEventDetailsById(request);
@@ -345,7 +362,11 @@ namespace RSI_Client
         {
             try
             {
+                X509Certificate2 cert = new X509Certificate2(KEYSTORE_PATH, PASSWORD);
                 var client = new EventsPortClient("EventsPortSoap11");
+                client.ClientCredentials.ClientCertificate.Certificate = cert;
+                ServicePointManager.ServerCertificateValidationCallback +=
+                     (mender, certificate, chain, sslPolicyErrors) => true;
                 generateEventsPDFRequest request = new generateEventsPDFRequest();
                 generateEventsPDFResponse response = client.generateEventsPDF(request);
                 File.WriteAllBytes("ListOfEvents.pdf", response.content);

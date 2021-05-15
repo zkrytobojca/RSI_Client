@@ -371,7 +371,7 @@
   </wsdl:binding>
   <wsdl:service name="EventsPortService">
     <wsdl:port name="EventsPortSoap11" binding="tns:EventsPortSoap11">
-      <soap:address location="http://localhost:8443/ws" />
+      <soap:address location="https://localhost:8443/ws" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
