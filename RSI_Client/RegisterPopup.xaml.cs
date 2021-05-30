@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using RSI_Client.EventsService;
 using RSI_Client.Model;
+using RestSharp;
+using RestSharp.Authenticators;
 
 namespace RSI_Client
 {
@@ -102,18 +104,19 @@ namespace RSI_Client
             {
                 try
                 {
-                    var client = new EventsPortClient("EventsPortSoap11");
-                    registerRequest request = new registerRequest();
-                    request.username = TextBoxRegisterLogin.Text;
-                    request.password = TextBoxRegisterPassword.Text;
-                    registerResponse response = client.register(request);
+                    var client = new RestClient("https://localhost:8443");
+                    var request = new RestRequest("user/register", Method.POST, RestSharp.DataFormat.Json);
+                    request.RequestFormat = RestSharp.DataFormat.Json;
+                    var param = new { username = TextBoxRegisterLogin.Text, password = TextBoxRegisterPassword.Text };
+                    request.AddJsonBody(param);
+                    var response = client.Post(request);
 
-                    if(response.status == opStatusCode.FAULT)
+                    if (response.ResponseStatus == ResponseStatus.Error)
                     {
                         MessageBox.Show("User with that username already exists", "Username taken", MessageBoxButton.OK, MessageBoxImage.Error);
                         ClearPassword();
                     }
-                    else if(response.status == opStatusCode.OK)
+                    else if(response.ResponseStatus == ResponseStatus.Completed)
                     {
                         RegisteredUser = new User
                         {

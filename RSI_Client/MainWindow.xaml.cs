@@ -23,6 +23,8 @@ using System.Windows.Shapes;
 using RSI_Client.EventsService;
 using RSI_Client.Model;
 using RSI_Client.ViewModels;
+using RestSharp;
+using RestSharp.Authenticators;
 
 namespace RSI_Client
 {

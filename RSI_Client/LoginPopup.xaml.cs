@@ -12,8 +12,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using RestSharp;
+using RestSharp.Authenticators;
+using RestSharp.Serialization.Json;
 using RSI_Client.EventsService;
 using RSI_Client.Model;
+using Newtonsoft.Json.Linq;
+
 
 namespace RSI_Client
 {
@@ -64,20 +69,21 @@ namespace RSI_Client
         {
             try
             {
-                var client = new EventsPortClient("EventsPortSoap11");
-                loginRequest request = new loginRequest();
-                request.username = TextBoxLogin.Text;
-                request.password = TextBoxPassword.Password;
-                loginResponse response = client.login(request);
-                
-                if(response.user == null)
+                var client = new RestClient("https://localhost:8443");
+                client.Authenticator = new HttpBasicAuthenticator(TextBoxLogin.Text, TextBoxPassword.Password);
+                var request = new RestRequest("user/login", Method.GET, RestSharp.DataFormat.Json);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                var response = client.Get(request);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
                     MessageBox.Show("Incorrect username or password", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     TextBoxPassword.Password = "";
                 }
                 else
                 {
-                    LoggedUser = new User(response.user.username, response.user.password, response.user.admin);
+                    var response_json = JObject.Parse(response.Content);
+                    LoggedUser = new User(TextBoxLogin.Text, TextBoxPassword.Password, Boolean.Parse(response_json.GetValue("admin").ToString()));
                     DialogResult = true;
                     Close();
                 }
