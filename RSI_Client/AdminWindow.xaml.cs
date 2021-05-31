@@ -84,7 +84,7 @@ namespace RSI_Client
                 AdminWindowVM.Events.Clear();
                 foreach (@event ev in events)
                 {
-                    AdminWindowVM.Events.Add(new Event(ev));
+                    //AdminWindowVM.Events.Add(new Event(ev));
                 }
             }
             catch (Exception ex)
@@ -104,7 +104,7 @@ namespace RSI_Client
                      (mender, certificate, chain, sslPolicyErrors) => true;
                 modifyEventRequest request = new modifyEventRequest();
                 request.@event = new @event();
-                request.@event.id = SelectedEvent.Id;
+                //request.@event.id = SelectedEvent.Id;
                 request.@event.name = TextBoxName.Text;
                 type type = SelectedEvent.Type;
                 Enum.TryParse<type>(TextBoxType.Text, out type);
@@ -128,7 +128,7 @@ namespace RSI_Client
                 AdminWindowVM.Events.Clear();
                 foreach (@event ev in events)
                 {
-                    AdminWindowVM.Events.Add(new Event(ev));
+                    //AdminWindowVM.Events.Add(new Event(ev));
                 }
             }
             catch (Exception ex)
@@ -161,7 +161,7 @@ namespace RSI_Client
                 ServicePointManager.ServerCertificateValidationCallback +=
                      (mender, certificate, chain, sslPolicyErrors) => true;
                 deleteEventRequest request = new deleteEventRequest();
-                request.eventId = removed.Id;
+                //request.eventId = removed.Id;
                 deleteEventResponse response = client.deleteEvent(request);
 
                 getAllEventsRequest request2 = new getAllEventsRequest();
@@ -170,7 +170,7 @@ namespace RSI_Client
                 AdminWindowVM.Events.Clear();
                 foreach (@event ev in events)
                 {
-                    AdminWindowVM.Events.Add(new Event(ev));
+                   // AdminWindowVM.Events.Add(new Event(ev));
                 }
             }
             catch (Exception ex)
@@ -431,7 +431,7 @@ namespace RSI_Client
                             AdminWindowVM.Events.Clear();
                             foreach (@event ev in events)
                             {
-                                AdminWindowVM.Events.Add(new Event(ev));
+                                //AdminWindowVM.Events.Add(new Event(ev));
                             }
                             break;
                         }
@@ -454,7 +454,7 @@ namespace RSI_Client
                             AdminWindowVM.Events.Clear();
                             foreach (@event ev in events)
                             {
-                                AdminWindowVM.Events.Add(new Event(ev));
+                                //AdminWindowVM.Events.Add(new Event(ev));
                             }
                             break;
                         }
@@ -472,7 +472,7 @@ namespace RSI_Client
                             AdminWindowVM.Events.Clear();
                             foreach (@event ev in events)
                             {
-                                AdminWindowVM.Events.Add(new Event(ev));
+                               // AdminWindowVM.Events.Add(new Event(ev));
                             }
                             break;
                         }

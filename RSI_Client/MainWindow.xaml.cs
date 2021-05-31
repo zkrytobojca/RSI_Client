@@ -25,6 +25,7 @@ using RSI_Client.Model;
 using RSI_Client.ViewModels;
 using RestSharp;
 using RestSharp.Authenticators;
+using Newtonsoft.Json.Linq;
 
 namespace RSI_Client
 {
@@ -112,19 +113,35 @@ namespace RSI_Client
             try
             {
                 X509Certificate2 cert = new X509Certificate2(KEYSTORE_PATH, PASSWORD);
-                var client = new EventsPortClient("EventsPortSoap11");
-                client.ClientCredentials.ClientCertificate.Certificate = cert;
                 ServicePointManager.ServerCertificateValidationCallback +=
                      (mender, certificate, chain, sslPolicyErrors) => true;
 
-                getAllEventsRequest request = new getAllEventsRequest();
-                @event[] events = client.getAllEvents(request);
+                var client = new RestClient("https://localhost:8443");
+                var request = new RestRequest("event/all", Method.GET, RestSharp.DataFormat.Json);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                var response = client.Get(request);
 
-                foreach (@event ev in events)
+                
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    MainWindowVM.Events.Add(new Event(ev));
+                    JArray response_json = JArray.Parse(response.Content);
+                    foreach (JObject item in response_json)
+                    {
+                        type type;
+                        Enum.TryParse<type>(item.GetValue("type").ToString(), out type);
+                        Event ev = new Event(
+                            item.GetValue("econst").ToString(),
+                            item.GetValue("name").ToString(),
+                            type,
+                            DateTime.Parse(item.GetValue("date").ToString()),
+                            Int32.Parse(item.GetValue("week").ToString()),
+                            Int32.Parse(item.GetValue("month").ToString()),
+                            Int32.Parse(item.GetValue("year").ToString()),
+                            item.GetValue("description").ToString()
+                            );
+                        MainWindowVM.Events.Add(ev);
+                    }
                 }
-
             }
             catch (Exception e)
             {
@@ -254,7 +271,7 @@ namespace RSI_Client
                             MainWindowVM.Events.Clear();
                             foreach (@event ev in events)
                             {
-                                MainWindowVM.Events.Add(new Event(ev));
+                                //MainWindowVM.Events.Add(new Event(ev));
                             }
                             break;
                         }
@@ -277,7 +294,7 @@ namespace RSI_Client
                             MainWindowVM.Events.Clear();
                             foreach (@event ev in events)
                             {
-                                MainWindowVM.Events.Add(new Event(ev));
+                                //MainWindowVM.Events.Add(new Event(ev));
                             }
                             break;
                         }
@@ -295,7 +312,7 @@ namespace RSI_Client
                             MainWindowVM.Events.Clear();
                             foreach (@event ev in events)
                             {
-                                MainWindowVM.Events.Add(new Event(ev));
+                                //MainWindowVM.Events.Add(new Event(ev));
                             }
                             break;
                         }
@@ -337,22 +354,26 @@ namespace RSI_Client
         {
             try
             {
-                X509Certificate2 cert = new X509Certificate2(KEYSTORE_PATH, PASSWORD);
-                var client = new EventsPortClient("EventsPortSoap11");
-                client.ClientCredentials.ClientCertificate.Certificate = cert;
-                ServicePointManager.ServerCertificateValidationCallback +=
-                     (mender, certificate, chain, sslPolicyErrors) => true;
-                getEventDetailsByIdRequest request = new getEventDetailsByIdRequest();
-                request.id = SelectedEvent.Id;
-                getEventDetailsByIdResponse response = client.getEventDetailsById(request);
-                SelectedEvent.Name = response.eventDetails.name;
-                SelectedEvent.Type = response.eventDetails.type;
-                SelectedEvent.Date = response.eventDetails.date;
-                SelectedEvent.Year = response.eventDetails.year;
-                SelectedEvent.Month = response.eventDetails.month;
-                SelectedEvent.Week = response.eventDetails.week;
-                SelectedEvent.Description = response.eventDetails.description;
-                MessageBox.Show("Event updated", "Event info", MessageBoxButton.OK, MessageBoxImage.Information);
+                var client = new RestClient("https://localhost:8443");
+                var request = new RestRequest("event/{eventId}", Method.GET, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id);
+                client.Authenticator = new HttpBasicAuthenticator("admin", "admin");
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                var response = client.Get(request);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    var response_json = JObject.Parse(response.Content);
+                    type type;
+                    Enum.TryParse<type>(response_json.GetValue("type").ToString(), out type);
+                    SelectedEvent.Id = response_json.GetValue("econst").ToString();
+                    SelectedEvent.Name = response_json.GetValue("name").ToString();
+                    SelectedEvent.Type = type;
+                    SelectedEvent.Date = DateTime.Parse(response_json.GetValue("date").ToString());
+                    SelectedEvent.Year = Int32.Parse(response_json.GetValue("year").ToString());
+                    SelectedEvent.Month = Int32.Parse(response_json.GetValue("month").ToString());
+                    SelectedEvent.Week = Int32.Parse(response_json.GetValue("week").ToString());
+                    SelectedEvent.Description = response_json.GetValue("description").ToString();
+                    MessageBox.Show("Event updated", "Event info", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
             catch (Exception ex)
             {

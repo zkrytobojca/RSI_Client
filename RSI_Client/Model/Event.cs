@@ -11,7 +11,7 @@ namespace RSI_Client.Model
     public class Event : INotifyPropertyChanged
     {
         #region Fields
-        public int Id { get; set; }
+        public string Id { get; set; }
         private string name;
         public string Name
         {
@@ -140,7 +140,7 @@ namespace RSI_Client.Model
         {
 
         }
-        public Event(int id, string name, RSI_Client.EventsService.type type, DateTime date, int week, int month, int year, string description)
+        public Event(string id, string name, RSI_Client.EventsService.type type, DateTime date, int week, int month, int year, string description)
         {
             Id = id;
             Name = name;
@@ -150,17 +150,6 @@ namespace RSI_Client.Model
             Month = month;
             Year = year;
             Description = description;
-        }
-        public Event(EventsService.@event ev)
-        {
-            Id = ev.id;
-            Name = ev.name;
-            Type = ev.type;
-            Date = ev.date;
-            Week = ev.week;
-            Month = ev.month;
-            Year = ev.year;
-            Description = ev.description;
         }
         #endregion Consctructors
     }
