@@ -271,5 +271,8 @@
   <ItemGroup>
     <Resource Include="Icons\PNG\star_filled.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\PNG\star_half.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

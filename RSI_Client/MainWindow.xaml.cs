@@ -258,14 +258,6 @@ namespace RSI_Client
             try
             {
                 var client = new RestClient("https://localhost:8443");
-                if (MainWindowVM.LoggedUser != null)
-                {
-                    client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
-                }
-                else
-                {
-                    client.Authenticator = new HttpBasicAuthenticator("admin", "admin");
-                }
 
                 switch (ComboBoxSearchType.SelectedIndex)
                 {
@@ -443,6 +435,15 @@ namespace RSI_Client
                     SelectedEvent.Month = Int32.Parse(response_json.GetValue("month").ToString());
                     SelectedEvent.Week = Int32.Parse(response_json.GetValue("week").ToString());
                     SelectedEvent.Description = response_json.GetValue("description").ToString();
+                }
+
+                request = new RestRequest("event/{eventId}/rating", Method.GET, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id);
+                response = client.Get(request);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    double rating = double.Parse(response.Content, CultureInfo.InvariantCulture);
+                    OverallRatingTextBlock.Text = rating.ToString();
+                    SetOverallStars(rating);
                     MessageBox.Show("Event updated", "Event info", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -458,7 +459,7 @@ namespace RSI_Client
             {
                 var client = new RestClient("https://localhost:8443");
                 var request = new RestRequest("event/to-pdf", Method.GET);
-                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/octet-stream"; };
+                //request.AddHeader("Content-Type", "application/octet-stream");
                 if (MainWindowVM.LoggedUser != null)
                 {
                     client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
@@ -467,7 +468,7 @@ namespace RSI_Client
                 {
                     client.Authenticator = new HttpBasicAuthenticator("admin", "admin");
                 }
-                var response = client.Get(request);
+                var response = client.Get(request); 
 
                 /*
                 File.WriteAllBytes(response.Headers.ToList()
@@ -475,7 +476,8 @@ namespace RSI_Client
                                         .Value.ToString(),
                                    client.DownloadData(request));
     */
-                File.WriteAllBytes("ListOfEvents.pdf", client.DownloadData(request));
+                //File.WriteAllBytes("ListOfEvents.pdf", client.DownloadData(request));
+                //File.WriteAllBytes("ListOfEvents.pdf", response.Content);
 
                 MessageBox.Show("PDF generated", "PDF info", MessageBoxButton.OK, MessageBoxImage.Information);
                 
@@ -590,6 +592,44 @@ namespace RSI_Client
             {
                 System.Console.WriteLine(ex.Message);
             }
+        }
+
+        private void SetOverallStars(double rating)
+        {
+            BitmapImage empty = new BitmapImage();
+            empty.BeginInit();
+            empty.UriSource = new Uri("Icons/PNG/star.png", UriKind.Relative);
+            empty.EndInit();
+
+            BitmapImage half = new BitmapImage();
+            half.BeginInit();
+            half.UriSource = new Uri("Icons/PNG/star_half.png", UriKind.Relative);
+            half.EndInit();
+
+            BitmapImage filled = new BitmapImage();
+            filled.BeginInit();
+            filled.UriSource = new Uri("Icons/PNG/star_filled.png", UriKind.Relative);
+            filled.EndInit();
+
+            if (rating < 0.5) OverallStar1.Source = empty;
+            else if(rating < 1) OverallStar1.Source = half;
+            else OverallStar1.Source = filled;
+
+            if (rating < 1.5) OverallStar2.Source = empty;
+            else if (rating < 2) OverallStar2.Source = half;
+            else OverallStar2.Source = filled;
+
+            if (rating < 2.5) OverallStar3.Source = empty;
+            else if (rating < 3) OverallStar3.Source = half;
+            else OverallStar3.Source = filled;
+
+            if (rating < 3.5) OverallStar4.Source = empty;
+            else if (rating < 4) OverallStar4.Source = half;
+            else OverallStar4.Source = filled;
+
+            if (rating < 4.5) OverallStar5.Source = empty;
+            else if (rating < 5) OverallStar5.Source = half;
+            else OverallStar5.Source = filled;
         }
     }
 }

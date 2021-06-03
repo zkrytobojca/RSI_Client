@@ -470,7 +470,6 @@ namespace RSI_Client
             try
             {
                 var client = new RestClient("https://localhost:8443");
-                client.Authenticator = new HttpBasicAuthenticator(AdminWindowVM.LoggedUser.Username, AdminWindowVM.LoggedUser.Password);
 
                 switch (ComboBoxSearchType.SelectedIndex)
                 {
