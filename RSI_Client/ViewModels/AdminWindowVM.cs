@@ -23,6 +23,20 @@ namespace RSI_Client.ViewModels
             Events = events;
             Users = users;
         }
+        private User loggedUser;
+
+        public User LoggedUser
+        {
+            get
+            {
+                return loggedUser;
+            }
+            set
+            {
+                loggedUser = value;
+                OnPropertyChanged("LoggedUser");
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string property)
         {

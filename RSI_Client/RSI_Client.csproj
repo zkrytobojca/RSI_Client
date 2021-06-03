@@ -265,5 +265,11 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\PNG\star.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\PNG\star_filled.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

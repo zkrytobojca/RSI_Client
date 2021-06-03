@@ -16,6 +16,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Newtonsoft.Json.Linq;
+using RestSharp;
+using RestSharp.Authenticators;
 using RSI_Client.EventsService;
 using RSI_Client.Model;
 using RSI_Client.ViewModels;
@@ -27,16 +30,14 @@ namespace RSI_Client
     /// </summary>
     public partial class AdminWindow : Window
     {
-        static string KEYSTORE_PATH = "C:/Users/Piotrek/Desktop/Piotrek/Studia/8_Semestr/RSI/Projekt1/SOAP_ws/src/main/resources/myKeyStore.p12";
-        static string PASSWORD = "123456";
-
         public Event SelectedEvent { get; set; }
         public User SelectedUser { get; set; }
         public AdminWindowVM AdminWindowVM { get; set; }
         
-        public AdminWindow(ObservableCollection<Event> events, ObservableCollection<User> users)
+        public AdminWindow(ObservableCollection<Event> events, ObservableCollection<User> users, User loggedUser)
         {
             AdminWindowVM = new AdminWindowVM(events, users);
+            AdminWindowVM.LoggedUser = loggedUser;
 
             InitializeComponent();
             ComboBoxSearchType.ItemsSource = ApplicationConstants.userSearches;
@@ -54,37 +55,56 @@ namespace RSI_Client
         {
             try
             {
-                X509Certificate2 cert = new X509Certificate2(KEYSTORE_PATH, PASSWORD);
-                var client = new EventsPortClient("EventsPortSoap11");
-                client.ClientCredentials.ClientCertificate.Certificate = cert;
-                ServicePointManager.ServerCertificateValidationCallback +=
-                     (mender, certificate, chain, sslPolicyErrors) => true;
-                addEventRequest request = new addEventRequest();
-                request.@event = new @event();
-                request.@event.name = TextBoxName.Text;
-                type type = 0;
-                Enum.TryParse<type>(TextBoxType.Text, out type);
-                request.@event.type = type;
-                request.@event.date = DatePickerReleaseDate.SelectedDate.Value;
+                var client = new RestClient("https://localhost:8443");
+                client.Authenticator = new HttpBasicAuthenticator(AdminWindowVM.LoggedUser.Username, AdminWindowVM.LoggedUser.Password);
+                var request = new RestRequest("event", Method.POST, RestSharp.DataFormat.Json);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+
                 int week = 0;
                 Int32.TryParse(TextBoxWeek.Text, out week);
-                request.@event.week = week;
                 int month = 0;
                 Int32.TryParse(TextBoxMonth.Text, out month);
-                request.@event.month = month;
                 int year = 0;
                 Int32.TryParse(TextBoxYear.Text, out year);
-                request.@event.year = year;
-                request.@event.description = TextBoxDescription.Text;
-                addEventResponse response = client.addEvent(request);
-
-                getAllEventsRequest request2 = new getAllEventsRequest();
-                @event[] events = client.getAllEvents(request2);
-
-                AdminWindowVM.Events.Clear();
-                foreach (@event ev in events)
+                var newEvent = new
                 {
-                    //AdminWindowVM.Events.Add(new Event(ev));
+                    name = TextBoxName.Text,
+                    type = TextBoxType.Text,
+                    date = DatePickerReleaseDate.SelectedDate.Value,
+                    week = week,
+                    month = month,
+                    year = year,
+                    description = TextBoxDescription.Text
+                };
+                request.AddJsonBody(newEvent);
+
+                var response = client.Post(request);
+
+                request = new RestRequest("event/all", Method.GET, RestSharp.DataFormat.Json);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                response = client.Get(request);
+
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    JArray response_json = JArray.Parse(response.Content);
+                    AdminWindowVM.Events.Clear();
+                    foreach (JObject item in response_json)
+                    {
+                        type type;
+                        Enum.TryParse<type>(item.GetValue("type").ToString(), out type);
+                        Event ev = new Event(
+                            item.GetValue("econst").ToString(),
+                            item.GetValue("name").ToString(),
+                            type,
+                            DateTime.Parse(item.GetValue("date").ToString()),
+                            Int32.Parse(item.GetValue("week").ToString()),
+                            Int32.Parse(item.GetValue("month").ToString()),
+                            Int32.Parse(item.GetValue("year").ToString()),
+                            item.GetValue("description").ToString()
+                            );
+                        AdminWindowVM.Events.Add(ev);
+                    }
                 }
             }
             catch (Exception ex)
@@ -97,38 +117,56 @@ namespace RSI_Client
         {
             try
             {
-                X509Certificate2 cert = new X509Certificate2(KEYSTORE_PATH, PASSWORD);
-                var client = new EventsPortClient("EventsPortSoap11");
-                client.ClientCredentials.ClientCertificate.Certificate = cert;
-                ServicePointManager.ServerCertificateValidationCallback +=
-                     (mender, certificate, chain, sslPolicyErrors) => true;
-                modifyEventRequest request = new modifyEventRequest();
-                request.@event = new @event();
-                //request.@event.id = SelectedEvent.Id;
-                request.@event.name = TextBoxName.Text;
-                type type = SelectedEvent.Type;
-                Enum.TryParse<type>(TextBoxType.Text, out type);
-                request.@event.type = type;
-                request.@event.date = DatePickerReleaseDate.SelectedDate.Value;
+                var client = new RestClient("https://localhost:8443");
+                client.Authenticator = new HttpBasicAuthenticator(AdminWindowVM.LoggedUser.Username, AdminWindowVM.LoggedUser.Password);
+                var request = new RestRequest("event/{eventId}", Method.PUT, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+
                 int week = 0;
                 Int32.TryParse(TextBoxWeek.Text, out week);
-                request.@event.week = week;
                 int month = 0;
                 Int32.TryParse(TextBoxMonth.Text, out month);
-                request.@event.month = month;
                 int year = 0;
                 Int32.TryParse(TextBoxYear.Text, out year);
-                request.@event.year = year;
-                request.@event.description = TextBoxDescription.Text;
-                modifyEventResponse response = client.modifyEvent(request);
-
-                getAllEventsRequest request2 = new getAllEventsRequest();
-                @event[] events = client.getAllEvents(request2);
-
-                AdminWindowVM.Events.Clear();
-                foreach (@event ev in events)
+                var newEvent = new
                 {
-                    //AdminWindowVM.Events.Add(new Event(ev));
+                    name = TextBoxName.Text,
+                    type = TextBoxType.Text,
+                    date = DatePickerReleaseDate.SelectedDate.Value,
+                    week = week,
+                    month = month,
+                    year = year,
+                    description = TextBoxDescription.Text
+                };
+                request.AddJsonBody(newEvent);
+
+                var response = client.Put(request);
+
+                request = new RestRequest("event/all", Method.GET, RestSharp.DataFormat.Json);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                response = client.Get(request);
+
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    JArray response_json = JArray.Parse(response.Content);
+                    AdminWindowVM.Events.Clear();
+                    foreach (JObject item in response_json)
+                    {
+                        type type;
+                        Enum.TryParse<type>(item.GetValue("type").ToString(), out type);
+                        Event ev = new Event(
+                            item.GetValue("econst").ToString(),
+                            item.GetValue("name").ToString(),
+                            type,
+                            DateTime.Parse(item.GetValue("date").ToString()),
+                            Int32.Parse(item.GetValue("week").ToString()),
+                            Int32.Parse(item.GetValue("month").ToString()),
+                            Int32.Parse(item.GetValue("year").ToString()),
+                            item.GetValue("description").ToString()
+                            );
+                        AdminWindowVM.Events.Add(ev);
+                    }
                 }
             }
             catch (Exception ex)
@@ -155,22 +193,37 @@ namespace RSI_Client
 
             try
             {
-                X509Certificate2 cert = new X509Certificate2(KEYSTORE_PATH, PASSWORD);
-                var client = new EventsPortClient("EventsPortSoap11");
-                client.ClientCredentials.ClientCertificate.Certificate = cert;
-                ServicePointManager.ServerCertificateValidationCallback +=
-                     (mender, certificate, chain, sslPolicyErrors) => true;
-                deleteEventRequest request = new deleteEventRequest();
-                //request.eventId = removed.Id;
-                deleteEventResponse response = client.deleteEvent(request);
+                var client = new RestClient("https://localhost:8443");
+                client.Authenticator = new HttpBasicAuthenticator(AdminWindowVM.LoggedUser.Username, AdminWindowVM.LoggedUser.Password);
+                var request = new RestRequest("event/{eventId}", Method.DELETE, RestSharp.DataFormat.Json).AddUrlSegment("eventId", removed.Id);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                var response = client.Delete(request);
 
-                getAllEventsRequest request2 = new getAllEventsRequest();
-                @event[] events = client.getAllEvents(request2);
+                request = new RestRequest("event/all", Method.GET, RestSharp.DataFormat.Json);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                response = client.Get(request);
 
-                AdminWindowVM.Events.Clear();
-                foreach (@event ev in events)
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                   // AdminWindowVM.Events.Add(new Event(ev));
+                    JArray response_json = JArray.Parse(response.Content);
+                    AdminWindowVM.Events.Clear();
+                    foreach (JObject item in response_json)
+                    {
+                        type type;
+                        Enum.TryParse<type>(item.GetValue("type").ToString(), out type);
+                        Event ev = new Event(
+                            item.GetValue("econst").ToString(),
+                            item.GetValue("name").ToString(),
+                            type,
+                            DateTime.Parse(item.GetValue("date").ToString()),
+                            Int32.Parse(item.GetValue("week").ToString()),
+                            Int32.Parse(item.GetValue("month").ToString()),
+                            Int32.Parse(item.GetValue("year").ToString()),
+                            item.GetValue("description").ToString()
+                            );
+                        AdminWindowVM.Events.Add(ev);
+                    }
                 }
             }
             catch (Exception ex)
@@ -416,22 +469,38 @@ namespace RSI_Client
         {
             try
             {
-                X509Certificate2 cert = new X509Certificate2(KEYSTORE_PATH, PASSWORD);
-                var client = new EventsPortClient("EventsPortSoap11");
-                client.ClientCredentials.ClientCertificate.Certificate = cert;
-                ServicePointManager.ServerCertificateValidationCallback +=
-                     (mender, certificate, chain, sslPolicyErrors) => true;
+                var client = new RestClient("https://localhost:8443");
+                client.Authenticator = new HttpBasicAuthenticator(AdminWindowVM.LoggedUser.Username, AdminWindowVM.LoggedUser.Password);
 
                 switch (ComboBoxSearchType.SelectedIndex)
                 {
                     case 0:
                         {
-                            getAllEventsRequest request = new getAllEventsRequest();
-                            @event[] events = client.getAllEvents(request);
-                            AdminWindowVM.Events.Clear();
-                            foreach (@event ev in events)
+                            var request = new RestRequest("event/all", Method.GET, RestSharp.DataFormat.Json);
+                            request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                            var response = client.Get(request);
+
+
+                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
                             {
-                                //AdminWindowVM.Events.Add(new Event(ev));
+                                JArray response_json = JArray.Parse(response.Content);
+                                AdminWindowVM.Events.Clear();
+                                foreach (JObject item in response_json)
+                                {
+                                    type type;
+                                    Enum.TryParse<type>(item.GetValue("type").ToString(), out type);
+                                    Event ev = new Event(
+                                        item.GetValue("econst").ToString(),
+                                        item.GetValue("name").ToString(),
+                                        type,
+                                        DateTime.Parse(item.GetValue("date").ToString()),
+                                        Int32.Parse(item.GetValue("week").ToString()),
+                                        Int32.Parse(item.GetValue("month").ToString()),
+                                        Int32.Parse(item.GetValue("year").ToString()),
+                                        item.GetValue("description").ToString()
+                                        );
+                                    AdminWindowVM.Events.Add(ev);
+                                }
                             }
                             break;
                         }
@@ -447,14 +516,36 @@ namespace RSI_Client
                             {
                                 break;
                             }
-                            getEventsByDateRequest request = new getEventsByDateRequest();
-                            request.date = searchedDate;
-                            @event[] events = client.getEventsByDate(request);
 
-                            AdminWindowVM.Events.Clear();
-                            foreach (@event ev in events)
+                            var request = new RestRequest("event", Method.GET, RestSharp.DataFormat.Json);
+                            request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                            string searchValue = searchedDate.Year.ToString() + "-"
+                                + (searchedDate.Month > 9 ? searchedDate.Month.ToString() : "0" + searchedDate.Month.ToString()) + "-"
+                                + (searchedDate.Day > 9 ? searchedDate.Day.ToString() : "0" + searchedDate.Day.ToString());
+                            request.AddQueryParameter("date", searchValue);
+                            var response = client.Get(request);
+
+
+                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
                             {
-                                //AdminWindowVM.Events.Add(new Event(ev));
+                                JArray response_json = JArray.Parse(response.Content);
+                                AdminWindowVM.Events.Clear();
+                                foreach (JObject item in response_json)
+                                {
+                                    type type;
+                                    Enum.TryParse<type>(item.GetValue("type").ToString(), out type);
+                                    Event ev = new Event(
+                                        item.GetValue("econst").ToString(),
+                                        item.GetValue("name").ToString(),
+                                        type,
+                                        DateTime.Parse(item.GetValue("date").ToString()),
+                                        Int32.Parse(item.GetValue("week").ToString()),
+                                        Int32.Parse(item.GetValue("month").ToString()),
+                                        Int32.Parse(item.GetValue("year").ToString()),
+                                        item.GetValue("description").ToString()
+                                        );
+                                    AdminWindowVM.Events.Add(ev);
+                                }
                             }
                             break;
                         }
@@ -465,14 +556,33 @@ namespace RSI_Client
                             {
                                 break;
                             }
-                            getEventsByWeekRequest request = new getEventsByWeekRequest();
-                            request.week = week;
-                            @event[] events = client.getEventsByWeek(request);
 
-                            AdminWindowVM.Events.Clear();
-                            foreach (@event ev in events)
+                            var request = new RestRequest("event", Method.GET, RestSharp.DataFormat.Json);
+                            request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                            request.AddQueryParameter("week", week.ToString());
+                            var response = client.Get(request);
+
+
+                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
                             {
-                               // AdminWindowVM.Events.Add(new Event(ev));
+                                JArray response_json = JArray.Parse(response.Content);
+                                AdminWindowVM.Events.Clear();
+                                foreach (JObject item in response_json)
+                                {
+                                    type type;
+                                    Enum.TryParse<type>(item.GetValue("type").ToString(), out type);
+                                    Event ev = new Event(
+                                        item.GetValue("econst").ToString(),
+                                        item.GetValue("name").ToString(),
+                                        type,
+                                        DateTime.Parse(item.GetValue("date").ToString()),
+                                        Int32.Parse(item.GetValue("week").ToString()),
+                                        Int32.Parse(item.GetValue("month").ToString()),
+                                        Int32.Parse(item.GetValue("year").ToString()),
+                                        item.GetValue("description").ToString()
+                                        );
+                                    AdminWindowVM.Events.Add(ev);
+                                }
                             }
                             break;
                         }

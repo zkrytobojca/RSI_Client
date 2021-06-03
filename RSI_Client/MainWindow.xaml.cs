@@ -78,7 +78,7 @@ namespace RSI_Client
             {
                 if (loginPopup.LoggedUser.IsAdmin)
                 {
-                    AdminWindow adminWindow = new AdminWindow(MainWindowVM.Events, MainWindowVM.Users)
+                    AdminWindow adminWindow = new AdminWindow(MainWindowVM.Events, MainWindowVM.Users, loginPopup.LoggedUser)
                     {
                         Owner = this,
                         WindowStartupLocation = WindowStartupLocation.CenterOwner
@@ -125,6 +125,7 @@ namespace RSI_Client
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     JArray response_json = JArray.Parse(response.Content);
+                    MainWindowVM.Events.Clear();
                     foreach (JObject item in response_json)
                     {
                         type type;
@@ -256,22 +257,45 @@ namespace RSI_Client
         {
             try
             {
-                X509Certificate2 cert = new X509Certificate2(KEYSTORE_PATH, PASSWORD);
-                var client = new EventsPortClient("EventsPortSoap11");
-                client.ClientCredentials.ClientCertificate.Certificate = cert;
-                ServicePointManager.ServerCertificateValidationCallback +=
-                     (mender, certificate, chain, sslPolicyErrors) => true;
+                var client = new RestClient("https://localhost:8443");
+                if (MainWindowVM.LoggedUser != null)
+                {
+                    client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
+                }
+                else
+                {
+                    client.Authenticator = new HttpBasicAuthenticator("admin", "admin");
+                }
 
                 switch (ComboBoxSearchType.SelectedIndex)
                 {
                     case 0:
                         {
-                            getAllEventsRequest request = new getAllEventsRequest();
-                            @event[] events = client.getAllEvents(request);
-                            MainWindowVM.Events.Clear();
-                            foreach (@event ev in events)
+                            var request = new RestRequest("event/all", Method.GET, RestSharp.DataFormat.Json);
+                            request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                            var response = client.Get(request);
+
+
+                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
                             {
-                                //MainWindowVM.Events.Add(new Event(ev));
+                                JArray response_json = JArray.Parse(response.Content);
+                                MainWindowVM.Events.Clear();
+                                foreach (JObject item in response_json)
+                                {
+                                    type type;
+                                    Enum.TryParse<type>(item.GetValue("type").ToString(), out type);
+                                    Event ev = new Event(
+                                        item.GetValue("econst").ToString(),
+                                        item.GetValue("name").ToString(),
+                                        type,
+                                        DateTime.Parse(item.GetValue("date").ToString()),
+                                        Int32.Parse(item.GetValue("week").ToString()),
+                                        Int32.Parse(item.GetValue("month").ToString()),
+                                        Int32.Parse(item.GetValue("year").ToString()),
+                                        item.GetValue("description").ToString()
+                                        );
+                                    MainWindowVM.Events.Add(ev);
+                                }
                             }
                             break;
                         }
@@ -287,14 +311,36 @@ namespace RSI_Client
                             {
                                 break;
                             }
-                            getEventsByDateRequest request = new getEventsByDateRequest();
-                            request.date = searchedDate;
-                            @event[] events = client.getEventsByDate(request);
 
-                            MainWindowVM.Events.Clear();
-                            foreach (@event ev in events)
+                            var request = new RestRequest("event", Method.GET, RestSharp.DataFormat.Json);
+                            request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                            string searchValue = searchedDate.Year.ToString() + "-" 
+                                + (searchedDate.Month > 9 ? searchedDate.Month.ToString() : "0" + searchedDate.Month.ToString()) + "-" 
+                                + (searchedDate.Day > 9 ? searchedDate.Day.ToString() : "0" + searchedDate.Day.ToString());
+                            request.AddQueryParameter("date", searchValue);
+                            var response = client.Get(request);
+
+
+                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
                             {
-                                //MainWindowVM.Events.Add(new Event(ev));
+                                JArray response_json = JArray.Parse(response.Content);
+                                MainWindowVM.Events.Clear();
+                                foreach (JObject item in response_json)
+                                {
+                                    type type;
+                                    Enum.TryParse<type>(item.GetValue("type").ToString(), out type);
+                                    Event ev = new Event(
+                                        item.GetValue("econst").ToString(),
+                                        item.GetValue("name").ToString(),
+                                        type,
+                                        DateTime.Parse(item.GetValue("date").ToString()),
+                                        Int32.Parse(item.GetValue("week").ToString()),
+                                        Int32.Parse(item.GetValue("month").ToString()),
+                                        Int32.Parse(item.GetValue("year").ToString()),
+                                        item.GetValue("description").ToString()
+                                        );
+                                    MainWindowVM.Events.Add(ev);
+                                }
                             }
                             break;
                         }
@@ -305,14 +351,32 @@ namespace RSI_Client
                             {
                                 break;
                             }
-                            getEventsByWeekRequest request = new getEventsByWeekRequest();
-                            request.week = week;
-                            @event[] events = client.getEventsByWeek(request);
+                            var request = new RestRequest("event", Method.GET, RestSharp.DataFormat.Json);
+                            request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                            request.AddQueryParameter("week", week.ToString());
+                            var response = client.Get(request);
 
-                            MainWindowVM.Events.Clear();
-                            foreach (@event ev in events)
+
+                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
                             {
-                                //MainWindowVM.Events.Add(new Event(ev));
+                                JArray response_json = JArray.Parse(response.Content);
+                                MainWindowVM.Events.Clear();
+                                foreach (JObject item in response_json)
+                                {
+                                    type type;
+                                    Enum.TryParse<type>(item.GetValue("type").ToString(), out type);
+                                    Event ev = new Event(
+                                        item.GetValue("econst").ToString(),
+                                        item.GetValue("name").ToString(),
+                                        type,
+                                        DateTime.Parse(item.GetValue("date").ToString()),
+                                        Int32.Parse(item.GetValue("week").ToString()),
+                                        Int32.Parse(item.GetValue("month").ToString()),
+                                        Int32.Parse(item.GetValue("year").ToString()),
+                                        item.GetValue("description").ToString()
+                                        );
+                                    MainWindowVM.Events.Add(ev);
+                                }
                             }
                             break;
                         }
@@ -356,7 +420,14 @@ namespace RSI_Client
             {
                 var client = new RestClient("https://localhost:8443");
                 var request = new RestRequest("event/{eventId}", Method.GET, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id);
-                client.Authenticator = new HttpBasicAuthenticator("admin", "admin");
+                if(MainWindowVM.LoggedUser != null)
+                {
+                    client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
+                }
+                else
+                {
+                    client.Authenticator = new HttpBasicAuthenticator("admin", "admin");
+                }
                 request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
                 var response = client.Get(request);
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -385,15 +456,135 @@ namespace RSI_Client
         {
             try
             {
-                X509Certificate2 cert = new X509Certificate2(KEYSTORE_PATH, PASSWORD);
-                var client = new EventsPortClient("EventsPortSoap11");
-                client.ClientCredentials.ClientCertificate.Certificate = cert;
-                ServicePointManager.ServerCertificateValidationCallback +=
-                     (mender, certificate, chain, sslPolicyErrors) => true;
-                generateEventsPDFRequest request = new generateEventsPDFRequest();
-                generateEventsPDFResponse response = client.generateEventsPDF(request);
-                File.WriteAllBytes("ListOfEvents.pdf", response.content);
+                var client = new RestClient("https://localhost:8443");
+                var request = new RestRequest("event/to-pdf", Method.GET);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/octet-stream"; };
+                if (MainWindowVM.LoggedUser != null)
+                {
+                    client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
+                }
+                else
+                {
+                    client.Authenticator = new HttpBasicAuthenticator("admin", "admin");
+                }
+                var response = client.Get(request);
+
+                /*
+                File.WriteAllBytes(response.Headers.ToList()
+                                        .Find(x => x.Name == "filename")
+                                        .Value.ToString(),
+                                   client.DownloadData(request));
+    */
+                File.WriteAllBytes("ListOfEvents.pdf", client.DownloadData(request));
+
                 MessageBox.Show("PDF generated", "PDF info", MessageBoxButton.OK, MessageBoxImage.Information);
+                
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void Rate1Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var client = new RestClient("https://localhost:8443");
+                var request = new RestRequest("event/{eventId}/rating", Method.POST, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
+                var newRating = new
+                {
+                    rating = 1
+                };
+                request.AddJsonBody(newRating);
+                var response = client.Post(request);
+                MessageBox.Show("Thank you for your rating!", "Rating info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
+        }
+        private void Rate2Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var client = new RestClient("https://localhost:8443");
+                var request = new RestRequest("event/{eventId}/rating", Method.POST, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
+                var newRating = new
+                {
+                    rating = 2
+                };
+                request.AddJsonBody(newRating);
+                var response = client.Post(request);
+                MessageBox.Show("Thank you for your rating!", "Rating info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
+        }
+        private void Rate3Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var client = new RestClient("https://localhost:8443");
+                var request = new RestRequest("event/{eventId}/rating", Method.POST, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
+                var newRating = new
+                {
+                    rating = 3
+                };
+                request.AddJsonBody(newRating);
+                var response = client.Post(request);
+                MessageBox.Show("Thank you for your rating!", "Rating info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
+        }
+        private void Rate4Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var client = new RestClient("https://localhost:8443");
+                var request = new RestRequest("event/{eventId}/rating", Method.POST, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
+                var newRating = new
+                {
+                    rating = 4
+                };
+                request.AddJsonBody(newRating);
+                var response = client.Post(request);
+                MessageBox.Show("Thank you for your rating!", "Rating info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
+        }
+        private void Rate5Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var client = new RestClient("https://localhost:8443");
+                var request = new RestRequest("event/{eventId}/rating", Method.POST, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
+                var newRating = new
+                {
+                    rating = 5
+                };
+                request.AddJsonBody(newRating);
+                var response = client.Post(request);
+                MessageBox.Show("Thank you for your rating!", "Rating info", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
