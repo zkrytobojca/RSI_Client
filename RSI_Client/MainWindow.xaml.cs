@@ -26,6 +26,7 @@ using RSI_Client.ViewModels;
 using RestSharp;
 using RestSharp.Authenticators;
 using Newtonsoft.Json.Linq;
+using Microsoft.Win32;
 
 namespace RSI_Client
 {
@@ -100,6 +101,7 @@ namespace RSI_Client
                 {
                     MainWindowVM.LoggedUser = loginPopup.LoggedUser;
                     ListOfAvailableEvents.SelectedIndex = 0;
+                    RefreshEvent(false);
                 }
             }
             else
@@ -183,13 +185,11 @@ namespace RSI_Client
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     double rating = double.Parse(response.Content, CultureInfo.InvariantCulture);
-                    OverallRatingTextBlock.Text = rating.ToString();
                     SetOverallStars(rating);
                 }
                 else
                 {
-                    OverallRatingTextBlock.Text = "Unknown";
-                    SetOverallStars(0);
+                    SetOverallStars();
                 }
 
                 var request2 = new RestRequest("event/{eventId}/rating/{userId}", Method.GET, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id).AddUrlSegment("userId", MainWindowVM.LoggedUser.Id);
@@ -197,13 +197,11 @@ namespace RSI_Client
                 if (response2.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     double rating = double.Parse(response2.Content, CultureInfo.InvariantCulture);
-                    UserRatingTextBlock.Text = rating.ToString();
                     SetUserStars(rating);
                 }
                 else
                 {
-                    UserRatingTextBlock.Text = "Unknown";
-                    SetUserStars(0);
+                    SetUserStars();
                 }
             }
             catch (Exception ex)
@@ -450,6 +448,11 @@ namespace RSI_Client
 
         private void RefreshButtonClick(object sender, RoutedEventArgs e)
         {
+            RefreshEvent(true);
+        }
+
+        private void RefreshEvent(bool withMessageBox)
+        {
             try
             {
                 var client = new RestClient("https://localhost:8443");
@@ -478,8 +481,11 @@ namespace RSI_Client
                 if (response2.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     double rating = double.Parse(response2.Content, CultureInfo.InvariantCulture);
-                    OverallRatingTextBlock.Text = rating.ToString();
                     SetOverallStars(rating);
+                }
+                else
+                {
+                    SetOverallStars();
                 }
 
                 var request3 = new RestRequest("event/{eventId}/rating/{userId}", Method.GET, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id).AddUrlSegment("userId", MainWindowVM.LoggedUser.Id);
@@ -487,15 +493,13 @@ namespace RSI_Client
                 if (response3.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     double rating = double.Parse(response3.Content, CultureInfo.InvariantCulture);
-                    UserRatingTextBlock.Text = rating.ToString();
                     SetUserStars(rating);
                 }
                 else
                 {
-                    UserRatingTextBlock.Text = "Unknown";
-                    SetUserStars(0);
+                    SetUserStars();
                 }
-                MessageBox.Show("Event updated", "Event info", MessageBoxButton.OK, MessageBoxImage.Information);
+                if(withMessageBox) MessageBox.Show("Event updated", "Event info", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
@@ -511,11 +515,13 @@ namespace RSI_Client
                 var request = new RestRequest("event/to-pdf", Method.GET);
                 request.AddHeader("Accept", "application/pdf");
                 client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
-                var response = client.Get(request); 
+                var response = client.Get(request);
 
-                File.WriteAllBytes("ListOfEvents.pdf", client.DownloadData(request));
-                MessageBox.Show("PDF generated", "PDF info", MessageBoxButton.OK, MessageBoxImage.Information);
-                
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = "LisOfEvents"; // Default file name
+                saveFileDialog.DefaultExt = ".pdf"; // Default file extension
+                if (saveFileDialog.ShowDialog() == true)
+                    File.WriteAllBytes(saveFileDialog.FileName, client.DownloadData(request));
             }
             catch (Exception ex)
             {
@@ -537,6 +543,7 @@ namespace RSI_Client
                 };
                 request.AddJsonBody(newRating);
                 var response = client.Post(request);
+                SetUserStars(1);
                 MessageBox.Show("Thank you for your rating!", "Rating info", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -558,6 +565,7 @@ namespace RSI_Client
                 };
                 request.AddJsonBody(newRating);
                 var response = client.Post(request);
+                SetUserStars(2);
                 MessageBox.Show("Thank you for your rating!", "Rating info", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -579,6 +587,7 @@ namespace RSI_Client
                 };
                 request.AddJsonBody(newRating);
                 var response = client.Post(request);
+                SetUserStars(3);
                 MessageBox.Show("Thank you for your rating!", "Rating info", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -600,6 +609,7 @@ namespace RSI_Client
                 };
                 request.AddJsonBody(newRating);
                 var response = client.Post(request);
+                SetUserStars(4);
                 MessageBox.Show("Thank you for your rating!", "Rating info", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -621,6 +631,7 @@ namespace RSI_Client
                 };
                 request.AddJsonBody(newRating);
                 var response = client.Post(request);
+                SetUserStars(5);
                 MessageBox.Show("Thank you for your rating!", "Rating info", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -629,7 +640,7 @@ namespace RSI_Client
             }
         }
 
-        private void SetOverallStars(double rating)
+        private void SetOverallStars(double rating = -1)
         {
             BitmapImage empty = new BitmapImage();
             empty.BeginInit();
@@ -665,9 +676,12 @@ namespace RSI_Client
             if (rating < 4.5) OverallStar5.Source = empty;
             else if (rating < 5) OverallStar5.Source = half;
             else OverallStar5.Source = filled;
+
+            if (rating == -1) OverallRatingTextBlock.Text = "Unknown";
+            else OverallRatingTextBlock.Text = rating.ToString();
         }
 
-        private void SetUserStars(double rating)
+        private void SetUserStars(double rating = -1)
         {
             BitmapImage empty = new BitmapImage();
             empty.BeginInit();
@@ -703,6 +717,9 @@ namespace RSI_Client
             if (rating < 4.5) UserStar5.Source = empty;
             else if (rating < 5) UserStar5.Source = half;
             else UserStar5.Source = filled;
+
+            if(rating == -1) UserRatingTextBlock.Text = "Unknown";
+            else UserRatingTextBlock.Text = rating.ToString();
         }
     }
 }
