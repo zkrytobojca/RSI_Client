@@ -12,7 +12,7 @@ namespace RSI_Client.Model
     [Serializable]
     public class User : INotifyPropertyChanged
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         private string username;
         public string Username
         {
@@ -51,8 +51,9 @@ namespace RSI_Client.Model
             Username = username;
             SeenEvents = new List<Event>();
         }
-        public User(string username, string password, bool isAdmin)
+        public User(string id, string username, string password, bool isAdmin)
         {
+            Id = id;
             Username = username;
             Password = password;
             IsAdmin = isAdmin;

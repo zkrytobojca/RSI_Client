@@ -71,6 +71,13 @@ namespace RSI_Client.Model
             }
 
         }
+        public String DateShort
+        {
+            get
+            {
+                return date.ToLongDateString();
+            }
+        }
 
         private int week;
         public int Week

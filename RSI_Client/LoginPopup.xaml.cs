@@ -83,7 +83,7 @@ namespace RSI_Client
                 else
                 {
                     var response_json = JObject.Parse(response.Content);
-                    LoggedUser = new User(TextBoxLogin.Text, TextBoxPassword.Password, Boolean.Parse(response_json.GetValue("admin").ToString()));
+                    LoggedUser = new User(response_json.GetValue("uconst").ToString(), TextBoxLogin.Text, TextBoxPassword.Password, Boolean.Parse(response_json.GetValue("admin").ToString()));
                     DialogResult = true;
                     Close();
                 }

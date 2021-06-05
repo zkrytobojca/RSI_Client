@@ -148,8 +148,6 @@ namespace RSI_Client
             {
                 System.Console.WriteLine(e.Message);
             }
-
-            MainWindowVM.Users.Add(new User("admin", "admin", true));
         }
         private void SaveObjects()
         {
@@ -167,6 +165,50 @@ namespace RSI_Client
             if (ListOfAvailableEvents.SelectedIndex >= 0 && ListOfAvailableEvents.SelectedIndex < MainWindowVM.Events.Count)
             {
                 SelectedEvent = MainWindowVM.Events[ListOfAvailableEvents.SelectedIndex];
+            }
+
+            try
+            {
+                var client = new RestClient("https://localhost:8443");
+                if (MainWindowVM.LoggedUser != null)
+                {
+                    client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
+                }
+                else
+                {
+                    client.Authenticator = new HttpBasicAuthenticator("admin", "admin");
+                }
+                var request = new RestRequest("event/{eventId}/rating", Method.GET, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id);
+                var response = client.Get(request);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    double rating = double.Parse(response.Content, CultureInfo.InvariantCulture);
+                    OverallRatingTextBlock.Text = rating.ToString();
+                    SetOverallStars(rating);
+                }
+                else
+                {
+                    OverallRatingTextBlock.Text = "Unknown";
+                    SetOverallStars(0);
+                }
+
+                var request2 = new RestRequest("event/{eventId}/rating/{userId}", Method.GET, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id).AddUrlSegment("userId", MainWindowVM.LoggedUser.Id);
+                var response2 = client.Get(request2);
+                if (response2.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    double rating = double.Parse(response2.Content, CultureInfo.InvariantCulture);
+                    UserRatingTextBlock.Text = rating.ToString();
+                    SetUserStars(rating);
+                }
+                else
+                {
+                    UserRatingTextBlock.Text = "Unknown";
+                    SetUserStars(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
             }
         }
 
@@ -412,14 +454,8 @@ namespace RSI_Client
             {
                 var client = new RestClient("https://localhost:8443");
                 var request = new RestRequest("event/{eventId}", Method.GET, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id);
-                if(MainWindowVM.LoggedUser != null)
-                {
-                    client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
-                }
-                else
-                {
-                    client.Authenticator = new HttpBasicAuthenticator("admin", "admin");
-                }
+                client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
+
                 request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
                 var response = client.Get(request);
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -437,15 +473,29 @@ namespace RSI_Client
                     SelectedEvent.Description = response_json.GetValue("description").ToString();
                 }
 
-                request = new RestRequest("event/{eventId}/rating", Method.GET, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id);
-                response = client.Get(request);
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                var request2 = new RestRequest("event/{eventId}/rating", Method.GET, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id);
+                var response2 = client.Get(request2);
+                if (response2.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    double rating = double.Parse(response.Content, CultureInfo.InvariantCulture);
+                    double rating = double.Parse(response2.Content, CultureInfo.InvariantCulture);
                     OverallRatingTextBlock.Text = rating.ToString();
                     SetOverallStars(rating);
-                    MessageBox.Show("Event updated", "Event info", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+
+                var request3 = new RestRequest("event/{eventId}/rating/{userId}", Method.GET, RestSharp.DataFormat.Json).AddUrlSegment("eventId", SelectedEvent.Id).AddUrlSegment("userId", MainWindowVM.LoggedUser.Id);
+                var response3 = client.Get(request3);
+                if (response3.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    double rating = double.Parse(response3.Content, CultureInfo.InvariantCulture);
+                    UserRatingTextBlock.Text = rating.ToString();
+                    SetUserStars(rating);
+                }
+                else
+                {
+                    UserRatingTextBlock.Text = "Unknown";
+                    SetUserStars(0);
+                }
+                MessageBox.Show("Event updated", "Event info", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
@@ -459,26 +509,11 @@ namespace RSI_Client
             {
                 var client = new RestClient("https://localhost:8443");
                 var request = new RestRequest("event/to-pdf", Method.GET);
-                //request.AddHeader("Content-Type", "application/octet-stream");
-                if (MainWindowVM.LoggedUser != null)
-                {
-                    client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
-                }
-                else
-                {
-                    client.Authenticator = new HttpBasicAuthenticator("admin", "admin");
-                }
+                request.AddHeader("Accept", "application/pdf");
+                client.Authenticator = new HttpBasicAuthenticator(MainWindowVM.LoggedUser.Username, MainWindowVM.LoggedUser.Password);
                 var response = client.Get(request); 
 
-                /*
-                File.WriteAllBytes(response.Headers.ToList()
-                                        .Find(x => x.Name == "filename")
-                                        .Value.ToString(),
-                                   client.DownloadData(request));
-    */
-                //File.WriteAllBytes("ListOfEvents.pdf", client.DownloadData(request));
-                //File.WriteAllBytes("ListOfEvents.pdf", response.Content);
-
+                File.WriteAllBytes("ListOfEvents.pdf", client.DownloadData(request));
                 MessageBox.Show("PDF generated", "PDF info", MessageBoxButton.OK, MessageBoxImage.Information);
                 
             }
@@ -630,6 +665,44 @@ namespace RSI_Client
             if (rating < 4.5) OverallStar5.Source = empty;
             else if (rating < 5) OverallStar5.Source = half;
             else OverallStar5.Source = filled;
+        }
+
+        private void SetUserStars(double rating)
+        {
+            BitmapImage empty = new BitmapImage();
+            empty.BeginInit();
+            empty.UriSource = new Uri("Icons/PNG/star.png", UriKind.Relative);
+            empty.EndInit();
+
+            BitmapImage half = new BitmapImage();
+            half.BeginInit();
+            half.UriSource = new Uri("Icons/PNG/star_half.png", UriKind.Relative);
+            half.EndInit();
+
+            BitmapImage filled = new BitmapImage();
+            filled.BeginInit();
+            filled.UriSource = new Uri("Icons/PNG/star_filled.png", UriKind.Relative);
+            filled.EndInit();
+
+            if (rating < 0.5) UserStar1.Source = empty;
+            else if (rating < 1) UserStar1.Source = half;
+            else UserStar1.Source = filled;
+
+            if (rating < 1.5) UserStar2.Source = empty;
+            else if (rating < 2) UserStar2.Source = half;
+            else UserStar2.Source = filled;
+
+            if (rating < 2.5) UserStar3.Source = empty;
+            else if (rating < 3) UserStar3.Source = half;
+            else UserStar3.Source = filled;
+
+            if (rating < 3.5) UserStar4.Source = empty;
+            else if (rating < 4) UserStar4.Source = half;
+            else UserStar4.Source = filled;
+
+            if (rating < 4.5) UserStar5.Source = empty;
+            else if (rating < 5) UserStar5.Source = half;
+            else UserStar5.Source = filled;
         }
     }
 }
