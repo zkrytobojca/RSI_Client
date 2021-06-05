@@ -518,8 +518,9 @@ namespace RSI_Client
                 var response = client.Get(request);
 
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.FileName = "LisOfEvents"; // Default file name
-                saveFileDialog.DefaultExt = ".pdf"; // Default file extension
+                saveFileDialog.FileName = "LisOfEvents";
+                saveFileDialog.DefaultExt = ".pdf";
+                saveFileDialog.Filter = "PDF (.pdf)|*.pdf";
                 if (saveFileDialog.ShowDialog() == true)
                     File.WriteAllBytes(saveFileDialog.FileName, client.DownloadData(request));
             }
